@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Recharge History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../css/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(232, 227, 227);
+        }
+
+        .sidebar {
+            position: sticky;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #162447, #1b1f3b);
+            padding: 15px;
+        }
+
+        .sidebar a,
+        .sidebar button {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .btn-double-slide {
+            position: relative;
+            color: white;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 15px;
+        }
+
+        .btn-double-slide::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: white;
+            color: #19064d;
+            top: -150%;
+            left: -150%;
+            transition: all 0.7s ease;
+        }
+
+        .btn-double-slide:hover::before {
+            top: 0;
+            left: 0;
+        }
+
+        .btn-double-slide span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-double-slide.active {
+            background-color: rgba(225, 215, 215, 0.5);
+            color: black;
+            font-weight: bold;
+        }
+
+        .modal-header {
+            background-color: #162447;
+            color: white;
+        }
+
+        .modal-body {
+            background-color: #e3e7f1;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .table-container {
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .table th,
+        .table td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-control {
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            font-size: 16px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            height: 45px;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 15px rgba(102, 126, 15, 0.8);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #764ba2;
+        }
+
+        .notification-dropdown .dropdown-menu {
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div class="sidebar col-md-2">
+            <h3 class="text-center fw-bold text-light">Admin Panel</h3>
+            <hr>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/A-Home.html';">
+                <span><i class="bi bi-house-door"></i> Dashboard</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Manage-Users.html';">
+                <span><i class="bi bi-people"></i> Plans Management</span>
+            </button>
+            <button class="btn btn-double-slide active mt-2"
+                onclick="window.location.href='../Admin/User_Management.html';">
+                <span><i class="bi bi-person-lines-fill"></i> Recharge History</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Reports.html';">
+                <span><i class="bi bi-graph-up"></i> Analysis</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/ConfigureFAQs.html';">
+                <span><i class="bi bi-gear"></i> Configure FAQs</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Settings.html';">
+                <span><i class="bi bi-gear"></i> Settings</span>
+            </button>
+        </div>
+
+        <div class="col-md-10 p-3 d-flex flex-column align-items-center">
+            <nav class="navbar navbar-expand-lg bg-danger navbar-dark px-3 rounded w-100">
+                <h3 id="dashboard">Recharge History</h3>
+                <div class="ms-auto d-flex align-items-center">
+                    <!-- Notifications Dropdown -->
+                    <div class="dropdown notification-dropdown me-3">
+                        <a href="#" class="text-white text-decoration-none" role="button" id="notificationDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell-fill" style="font-size: 1.5rem;"></i>
+                            <span
+                                class="badge bg-warning rounded-pill position-absolute top-0 start-100 translate-middle">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+                            <li><a class="dropdown-item" href="#">New recharge request from 9908765432</a></li>
+                            <li><a class="dropdown-item" href="#">Payment failed for user ID 5</a></li>
+                            <li><a class="dropdown-item" href="#">System update available</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-center" href="#">View All Notifications</a></li>
+                        </ul>
+                    </div>
+                    <!-- User Dropdown -->
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
+                            role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="35" height="35"
+                                src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/user--v1.png" alt="user"
+                                class="rounded-circle me-0">
+                            <span>Yogasathya R</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i
+                                        class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <hr class="w-100">
+
+            <div class="search-container position-relative">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by any field...">
+                <i class="bi bi-search search-icon"></i>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Mobile Number</th>
+                            <th>Plan Title</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTable"></tbody>
+                </table>
+            </div>
+
+            <h5 class="mb-3 mt-4" style="color: #19064d;">User Growth Over Time</h5>
+            <div style="width: 70%; height: 60%; background-color: white; border-radius: 20px; padding: 5px;">
+                <canvas id="userGrowthChart" max-width="600" max-height="400"></canvas>
+            </div>
+        </div>
+
+        <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userModalLabel">Recharge Details (9908765432)</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modalContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        let rechargeHistory = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRechargeHistory();
+            fetchUserGrowth();
+            setupLogout();
+        });
+
+        async function fetchRechargeHistory() {
+            try {
+                const response = await fetch('http://localhost:8082/api/recharge/admin/history');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch recharge history: ${response.status}`);
+                }
+                rechargeHistory = await response.json();
+                console.log('Recharge History:', rechargeHistory);
+                renderRechargeHistory(rechargeHistory);
+            } catch (error) {
+                console.error('Error fetching recharge history:', error);
+                document.getElementById('historyTable').innerHTML = '<tr><td colspan="6" class="text-center">Failed to fetch recharge history.</td></tr>';
+            }
+        }
+
+        function renderRechargeHistory(history) {
+            const tbody = document.getElementById('historyTable');
+            if (history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No recharge history found.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = history.map(record => `
+                <tr onclick="showRechargeDetails()">
+                    <td>${record.userId}</td>
+                    <td>${record.mobileNumber || '-'}</td>
+                    <td>${record.planTitle || '-'}</td>
+                    <td>₹${record.price || '-'}</td>
+                    <td>${record.status || '-'}</td>
+                    <td>${record.timestamp ? new Date(record.timestamp).toLocaleString() : '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        async function fetchUserGrowth() {
+            try {
+                const response = await fetch('http://localhost:8082/api/users/growth');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch user growth: ${response.status}`);
+                }
+                const growthData = await response.json();
+                console.log('User Growth Data:', growthData);
+                renderUserGrowthChart(growthData);
+            } catch (error) {
+                console.error('Error fetching user growth:', error);
+                document.getElementById('userGrowthChart').parentElement.innerHTML = '<p class="text-center">Failed to load growth data.</p>';
+            }
+        }
+
+        function renderUserGrowthChart(growthData) {
+            const labels = Object.keys(growthData);
+            const data = Object.values(growthData);
+
+            if (labels.length === 0) {
+                document.getElementById('userGrowthChart').parentElement.innerHTML = '<p class="text-center">No growth data available.</p>';
+                return;
+            }
+
+            const ctx = document.getElementById('userGrowthChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'New Users',
+                        data: data,
+                        borderColor: '#764ba2',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'User Growth Over Time' }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Month' } },
+                        y: { beginAtZero: true, title: { display: true, text: 'Number of Users' } }
+                    }
+                }
+            });
+        }
+
+        function showRechargeDetails() {
+            const userRecords = rechargeHistory.filter(record => record.mobileNumber === '9908765432');
+            if (userRecords.length === 0) {
+                document.getElementById('modalContent').innerHTML = '<p>No recharge history found for 9908765432.</p>';
+            } else {
+                const content = userRecords.map(record => `
+                    <div style="padding-bottom: 10px; margin-bottom: 10px;">
+                        <p><strong>Transaction ID:</strong> ${record.transactionId || '-'}</p>
+                        <p><strong>User ID:</strong> ${record.userId || '-'}</p>
+                        <p><strong>Mobile Number:</strong> ${record.mobileNumber || '-'}</p>
+                        <p><strong>User Name:</strong> ${record.userName || '-'}</p>
+                        <p><strong>Plan Title:</strong> ${record.planTitle || '-'}</p>
+                        <p><strong>Plan Benefits:</strong> ${record.planBenefits || '-'}</p>
+                        <p><strong>Additional Benefits:</strong> ${record.additionalBenefits || '-'}</p>
+                        <p><strong>Price:</strong> ${record.price ? `₹${record.price}` : '-'}</p>
+                        <p><strong>Validity:</strong> ${record.validity || '-'}</p>
+                        <p><strong>Payment Method:</strong> ${record.paymentMethod || '-'}</p>
+                        <p><strong>Payment ID:</strong> ${record.paymentId || '-'}</p>
+                        <p><strong>Status:</strong> ${record.status || '-'}</p>
+                        <p><strong>Timestamp:</strong> ${record.timestamp ? new Date(record.timestamp).toLocaleString() : '-'}</p>
+                        <p><strong>Plan ID:</strong> ${record.planId || '-'}</p>
+                        <p><strong>Plan Category:</strong> ${record.planCategory || '-'}</p>
+                        ${userRecords.indexOf(record) < userRecords.length - 1 ? '<hr>' : ''}
+                    </div>
+                `).join('');
+                document.getElementById('modalContent').innerHTML = content;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('userModal'), {
+                keyboard: true,
+                backdrop: 'static'
+            });
+            modal.show();
+        }
+
+        function setupLogout() {
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                console.log('Logout clicked - No action taken');
+            });
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const filter = searchInput.value.toUpperCase();
+            const table = document.getElementById('historyTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 0; i < tr.length; i++) {
+                const tds = tr[i].getElementsByTagName('td');
+                let match = false;
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j] && tds[j].textContent.toUpperCase().includes(filter)) {
+                        match = true;
+                        break;
+                    }
+                }
+                tr[i].style.display = match ? '' : 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

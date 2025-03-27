@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background: white;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #008080, #022b53);
+            padding: 13px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+        }
+
+        .account-img-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        .container {
+            margin-top: 4rem;
+            max-width: 1200px;
+        }
+
+        .history-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a0033;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #7b00ff, #00b7c2);
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 15px;
+            border-bottom: 2px solid #fff;
+        }
+
+        .table tbody tr {
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.02);
+        }
+
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .view-more-btn {
+            background: linear-gradient(to right, #7b00ff, #00b7c2);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .view-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(123, 0, 255, 0.4);
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #7b00ff, #00b7c2);
+            color: #fff;
+            border-bottom: none;
+        }
+
+        .modal-body p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .modal-body strong {
+            color: #1a0033;
+        }
+
+        footer {
+            background-color: #015b5b;
+            color: #fff;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #f8f9fa !important;
+            text-decoration: underline !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5" href="../FrontEnd/Home.html">MOBI-COMM</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto me-5">
+                        <li class="nav-item"><a class="nav-link" href="../FrontEnd/FAQ.html">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../FrontEnd/Support.html">Help</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <img class="account-img-icon" src="../Assets/Icons/icon2.png" alt="User Icon" width="26"
+                                    height="26">
+                                Account
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                <li><a class="dropdown-item" href="../FrontEnd/Profile.html">Manage Profile</a></li>
+                                <li><a class="dropdown-item" href="../FrontEnd/FirstandLast.html">Log out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2 class="history-title">Payment History</h2>
+            <div class="table-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Plan Title</th>
+                            <th>Price</th>
+                            <th>Validity</th>
+                            <th>Recharged Number</th>
+                            <th>Date & Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="viewMoreModal" tabindex="-1" aria-labelledby="viewMoreModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewMoreModalLabel">Transaction Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="viewMoreDetails"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="container-fluid">
+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        const backendUrl = 'http://localhost:8082';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const verifiedMobileNumber = localStorage.getItem('verifiedMobileNumber');
+            const userId = localStorage.getItem('userId');
+            const tbody = document.getElementById('historyTableBody');
+
+            if (!token || !verifiedMobileNumber || !userId) {
+                handleUnauthorized();
+                return;
+            }
+
+            fetchRechargeHistory(userId, token);
+            updateNavbar();
+            setupNavbarListeners();
+        });
+
+        // Fetch recharge history with token
+        async function fetchRechargeHistory(userId, token) {
+            try {
+                const response = await fetch(`${backendUrl}/api/recharge/history/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error(`Failed to fetch recharge history: ${response.status}`);
+                }
+
+                const history = await response.json();
+                renderRechargeHistory(history);
+            } catch (error) {
+                console.error('Error fetching recharge history:', error);
+                document.getElementById('historyTableBody').innerHTML = '<tr><td colspan="6" class="text-center">An error occurred while fetching recharge history.</td></tr>';
+            }
+        }
+
+        // Render recharge history
+        function renderRechargeHistory(history) {
+            const tbody = document.getElementById('historyTableBody');
+            if (!history || history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No payment history available.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = history.map(transaction => `
+            <tr>
+                <td>${transaction.planTitle || 'Unknown Plan'}</td>
+                <td>₹${transaction.price || 'N/A'}</td>
+                <td>${transaction.validity || 'N/A'}</td>
+                <td>${transaction.mobileNumber || localStorage.getItem('verifiedMobileNumber')}</td>
+                <td>${new Date(transaction.timestamp).toLocaleString()}</td>
+                <td>
+                    <button class="view-more-btn" data-transaction='${JSON.stringify(transaction)}' data-bs-toggle="modal" data-bs-target="#viewMoreModal">View More</button>
+                </td>
+            </tr>
+        `).join('');
+
+            // Handle View More button clicks
+            document.querySelectorAll('.view-more-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const transaction = JSON.parse(e.target.getAttribute('data-transaction'));
+                    const modalBody = document.getElementById('viewMoreDetails');
+                    modalBody.innerHTML = `
+                    <p><strong>Plan Title:</strong> ${transaction.planTitle || 'Unknown Plan'}</p>
+                    <p><strong>Price:</strong> ₹${transaction.price || 'N/A'}</p>
+                    <p><strong>Validity:</strong> ${transaction.validity || 'N/A'}</p>
+                    <p><strong>Recharged Number:</strong> ${transaction.mobileNumber || localStorage.getItem('verifiedMobileNumber')}</p>
+                    <p><strong>Date & Time:</strong> ${new Date(transaction.timestamp).toLocaleString()}</p>
+                    <p><strong>Transaction ID:</strong> ${transaction.transactionId || 'N/A'}</p>
+                    <p><strong>Payment ID:</strong> ${transaction.paymentId || 'N/A'}</p>
+                    <p><strong>Payment Method:</strong> ${transaction.paymentMethod || 'N/A'}</p>
+                    <p><strong>Status:</strong> ${transaction.status || 'N/A'}</p>
+                    <p><strong>Details:</strong> ${transaction.details || 'N/A'}</p>
+                    <p><strong>Extras:</strong> ${transaction.extras || 'None'}</p>
+                `;
+                });
+            });
+        }
+
+        // Handle unauthorized access
+        function handleUnauthorized() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('verifiedMobileNumber');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('role');
+            alert('Session expired or unauthorized access. Please verify your mobile number again.');
+            window.location.href = '../FrontEnd/FirstandLast.html';
+        }
+
+        function updateNavbar() {
+            const token = localStorage.getItem('token');
+            const logoutItem = document.querySelector(".dropdown-menu li:nth-child(2) a");
+            const manageProfileLink = document.querySelector(".dropdown-menu li:nth-child(1) a");
+
+            if (token) {
+                logoutItem.textContent = 'Log out';
+                logoutItem.href = '#';
+                logoutItem.onclick = logout;
+                manageProfileLink.style.pointerEvents = 'auto';
+                manageProfileLink.style.color = '';
+            } else {
+                logoutItem.textContent = 'Log out';
+                logoutItem.href = '../FrontEnd/FirstandLast.html';
+                logoutItem.onclick = null;
+                manageProfileLink.style.pointerEvents = 'none';
+                manageProfileLink.style.color = '#ccc';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('verifiedMobileNumber');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('role');
+            alert('Logged out successfully!');
+            window.location.href = '../FrontEnd/FirstandLast.html';
+        }
+
+        // Verify profile and redirect
+        async function verifyProfileAndRedirect(event) {
+            event.preventDefault();
+            const token = localStorage.getItem('token');
+            const mobileNumber = localStorage.getItem('verifiedMobileNumber');
+            if (!token || !mobileNumber) {
+                handleUnauthorized();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${backendUrl}/api/users/validate-mobile/${mobileNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                const result = await response.json();
+
+                if (result.valid) {
+                    window.location.href = '../FrontEnd/Profile.html';
+                } else {
+                    alert('Profile not found! Please register or contact support.');
+                    localStorage.removeItem('verifiedMobileNumber');
+                }
+            } catch (error) {
+                console.error('Error verifying profile:', error);
+                alert('An error occurred while verifying your profile. Please try again.');
+            }
+        }
+
+        function setupNavbarListeners() {
+            document.querySelector('.dropdown-menu a[href="../FrontEnd/Profile.html"]').addEventListener('click', verifyProfileAndRedirect);
+
+            const dropdownToggle = document.getElementById('accountDropdown');
+            dropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const dropdownMenu = dropdownToggle.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+        }
+    </script>
+</body>
+
+</html>

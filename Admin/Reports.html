@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../css/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(232, 227, 227);
+        }
+
+        .sidebar {
+            position: sticky;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #162447, #1b1f3b);
+            padding: 15px;
+        }
+
+        .sidebar a,
+        .sidebar button {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .main-container {
+            padding: 20px;
+        }
+
+        .card {
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            border-radius: 20px 0px 20px 0px !important;
+            box-shadow: 2px 4px 12px rgba(1, 0, 0, 0.1) !important;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        .chart-container {
+            width: 100%;
+        }
+
+        .donut {
+            max-height: 340px;
+        }
+
+        .para {
+            font-size: 15px;
+        }
+
+        .btn-double-slide {
+            position: relative;
+            color: white;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 15px;
+        }
+
+        .btn-double-slide::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: white;
+            color: #19064d;
+            top: -150%;
+            left: -150%;
+            transition: all 0.7s ease;
+        }
+
+        .btn-double-slide:hover::before {
+            top: 0;
+            left: 0;
+        }
+
+        .btn-double-slide span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-double-slide.active {
+            background-color: rgba(225, 215, 215, 0.5);
+            color: black;
+            font-weight: bold;
+        }
+
+        .dropdown-menu {
+            width: 250px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .dropdown-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .text {
+            flex-grow: 1;
+            color: #333;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .recommendation-card {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            height: 380px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .recommendation-left {
+            width: 50%;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .recommendation-right {
+            width: 50%;
+            padding: 10px;
+        }
+
+        .recommendation-details {
+            font-size: 14px;
+            margin-top: 5px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        /* Custom Scrollbar Styling */
+        .recommendation-details::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .recommendation-details::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .recommendation-details::-webkit-scrollbar-thumb {
+            background: #4b9cd3;
+            border-radius: 4px;
+            border: 1px solid #fff3cd;
+        }
+
+        .recommendation-details::-webkit-scrollbar-thumb:hover {
+            background: #357abd;
+        }
+
+        .recommendation-title {
+            color: #5cb85c;
+            font-weight: bold;
+        }
+
+        #recommendation-text {
+            color: #f0ad4e;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .recommendation-details ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .recommendation-details li {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .weekly-chart {
+            max-height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div class="sidebar col-md-2">
+            <h3 class="text-center fw-bold text-light">Admin Panel</h3>
+            <hr>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/A-Home.html';">
+                <span><i class="bi bi-house-door"></i> Dashboard</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Manage-Users.html';">
+                <span><i class="bi bi-people"></i> Plans Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/User_Management.html';">
+                <span><i class="bi bi-person-lines-fill"></i> User Management</span>
+            </button>
+            <button class="btn btn-double-slide active mt-2" onclick="window.location.href='../Admin/Reports.html';">
+                <span><i class="bi bi-graph-up"></i> Analysis</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/ConfigureFAQs.html';">
+                <span><i class="bi bi-gear"></i> Configure FAQs</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Settings.html';">
+                <span><i class="bi bi-gear"></i> Settings</span>
+            </button>
+        </div>
+
+        <div class="col-md-10 d-flex flex-column align-items-center main-container">
+            <nav class="navbar navbar-expand-lg bg-danger navbar-dark px-3 rounded w-100">
+                <h3 id="dashboard">Analysis</h3>
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown me-2">
+                        <a href="#" class="text-white text-decoration-none" role="button" id="messagesDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/chat-message.png" alt="Messages" />
+                            <span
+                                class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="messagesDropdown">
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/user.png" alt="User Icon">
+                                <div class="text">New message from John Doe<br>
+                                    <p>Hello, I need help with my account settings.</p>
+                                </div>
+                                <div class="timestamp">10:30 AM</div>
+                            </li>
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/user.png" alt="User Icon">
+                                <div class="text">New message from Jane Smith<br>
+                                    <p>Hi, I'm unable to access my account.</p>
+                                </div>
+                                <div class="timestamp">10:45 AM</div>
+                            </li>
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/user.png" alt="User Icon">
+                                <div class="text">New message from Saraswathi Ramesh<br>
+                                    <p>Hello, I have a question regarding a recharge.</p>
+                                </div>
+                                <div class="timestamp">10:30 AM</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown me-4">
+                        <a href="#" class="text-white text-decoration-none" role="button" id="notificationsDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/appointment-reminders.png"
+                                alt="Notifications" />
+                            <span
+                                class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">2</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/calendar.png" alt="Calendar Icon">
+                                <div class="text">Event "Project Deadline" is today</div>
+                                <div class="timestamp">09:00 AM</div>
+                            </li>
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/warning-shield.png" alt="Warning Icon">
+                                <div class="text">Security alert: New login from unknown device</div>
+                                <div class="timestamp">08:45 AM</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
+                            role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="35" height="35"
+                                src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/user--v1.png" alt="user"
+                                class="rounded-circle me-0">
+                            <span id="adminName">Yogasathya R</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i
+                                        class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <hr class="w-100">
+
+            <div class="container">
+                <div class="row mt-2">
+                    <div class="col-md-6 col-lg-6">
+                        <div class="card p-3">
+                            <div class="card-body donut">
+                                <h5 class="card-title text-center">Payment Method Usage</h5>
+                                <p class="mt-3 text-center para">The most popular ways users complete their mobile
+                                    recharges</p>
+                                <canvas class="chart-container" id="payment-method"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div class="card p-3">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">New vs. Returning Users</h5>
+                                <p class="mt-3 text-center para">Ratio of first-time users vs. repeat customers</p>
+                                <canvas class="chart-container" id="new-vs-returning"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12">
+                        <div class="recommendation-card">
+                            <div class="recommendation-left">
+                                <h5 class="card-title recommendation-title">Recommendations</h5>
+                                <p id="recommendation-text">Loading recommendation...</p>
+                                <div id="recommendation-details" class="recommendation-details"></div>
+                            </div>
+                            <div class="recommendation-right">
+                                <canvas id="weekly-chart" class="weekly-chart pt-5"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let paymentChart, newVsReturningChart, weeklyChart;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+            const adminEmail = localStorage.getItem('adminEmail');
+
+            if (!token || role !== 'ROLE_ADMIN') {
+                alert('Access denied. Admin login required.');
+                window.location.href = '../FrontEnd/AdminLogin.html';
+                return;
+            }
+
+            document.getElementById('adminName').textContent = adminEmail.split('@')[0] || 'Admin';
+
+            fetchPaymentMethods(token);
+            fetchNewVsReturning(token);
+            fetchRecommendations(token);
+            setupLogout();
+        });
+
+        async function fetchPaymentMethods(token) {
+            try {
+                const response = await fetch('http://localhost:8082/api/recharge/admin/payment-methods', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 403) throw new Error('Access forbidden.');
+                    throw new Error(`Failed to fetch payment methods: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Payment Methods:', data);
+                renderPaymentMethodChart(data);
+            } catch (error) {
+                console.error('Error fetching payment methods:', error);
+                document.getElementById('payment-method').parentElement.innerHTML = '<p class="text-center">Failed to load payment data.</p>';
+                handleAuthError(error);
+            }
+        }
+
+        function renderPaymentMethodChart(data) {
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+            if (paymentChart) paymentChart.destroy();
+            const ctx = document.getElementById('payment-method').getContext('2d');
+            paymentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Payment Method Usage',
+                        backgroundColor: ['rgba(0, 255, 255, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(255, 0, 255, 0.6)', 'rgba(255, 255, 0, 0.6)'],
+                        data: values
+                    }]
+                },
+                options: {
+                    cutout: '50%',
+                    responsive: true,
+                    plugins: { legend: { position: 'right' }, tooltip: { enabled: true } },
+                    hoverOffset: 20,
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+        }
+
+        async function fetchNewVsReturning(token) {
+            try {
+                const response = await fetch('http://localhost:8082/api/users/new-vs-returning', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 403) throw new Error('Access forbidden.');
+                    throw new Error(`Failed to fetch new vs returning users: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('New vs Returning Users:', data);
+                renderNewVsReturningChart(data);
+            } catch (error) {
+                console.error('Error fetching new vs returning users:', error);
+                document.getElementById('new-vs-returning').parentElement.innerHTML = '<p class="text-center">Failed to load user data.</p>';
+                handleAuthError(error);
+            }
+        }
+
+        function renderNewVsReturningChart(data) {
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+            if (newVsReturningChart) newVsReturningChart.destroy();
+            const ctx = document.getElementById('new-vs-returning').getContext('2d');
+            newVsReturningChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'User Type Distribution',
+                        backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)'],
+                        data: values
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        async function fetchRecommendations(token) {
+            try {
+                const response = await fetch('http://localhost:8082/api/recharge/admin/recommendations', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Recommendation API Error Response:', errorText);
+                    if (response.status === 403) throw new Error('Access forbidden.');
+                    throw new Error(`Failed to fetch recommendations: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Recommendations:', data);
+
+                const recommendationText = data.message || 'No recommendations available.';
+                document.getElementById('recommendation-text').textContent = recommendationText;
+
+                const detailsDiv = document.getElementById('recommendation-details');
+                if (data.plans && data.plans.length > 0) {
+                    let detailsHtml = '<h6>All Trending Plans:</h6><ul>';
+                    data.plans.forEach(plan => {
+                        detailsHtml += `
+                    <li>
+                        <strong>${plan.title}</strong><br>
+                        Price: ₹${plan.price}<br>
+                        Validity: ${plan.validity}<br>
+                        Benefits: ${plan.benefits}<br>
+                        Users Recharged: ${plan.rechargeCount}
+                    </li>`;
+                    });
+                    detailsHtml += '</ul>';
+                    detailsDiv.innerHTML = detailsHtml;
+                } else {
+                    detailsDiv.innerHTML = '';
+                }
+
+                if (data.weeklyData) {
+                    renderWeeklyChart(data.weeklyData);
+                }
+            } catch (error) {
+                console.error('Error fetching recommendations:', error);
+                document.getElementById('recommendation-text').textContent = 'Failed to load recommendation.';
+                document.getElementById('recommendation-details').innerHTML = '';
+                handleAuthError(error);
+            }
+        }
+
+        function renderWeeklyChart(weeklyData) {
+            const labels = Object.keys(weeklyData).map(date => new Date(date).toLocaleDateString('en-US', { weekday: 'short' }));
+            const values = Object.values(weeklyData);
+            if (weeklyChart) weeklyChart.destroy();
+            const ctx = document.getElementById('weekly-chart').getContext('2d');
+            weeklyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Recharges This Week',
+                        data: values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function handleAuthError(error) {
+            if (error.message.includes('forbidden')) {
+                localStorage.clear();
+                window.location.href = '../FrontEnd/AdminLogin.html';
+            }
+        }
+
+        function setupLogout() {
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.clear();
+                console.log('Logged out - Redirecting to login page');
+                window.location.href = '../FrontEnd/AdminLogin.html';
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../css/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: rgb(232, 227, 227);
+        }
+
+        .sidebar {
+            position: sticky;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #162447, #1b1f3b);
+            padding: 15px;
+        }
+
+        .sidebar a,
+        .sidebar button {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .card-body {
+            min-height: 350px;
+        }
+
+        .card:hover {
+            box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+            transform: scale(1.03);
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-title {
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .btn-double-slide {
+            position: relative;
+            color: white;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            padding: 10px 10px;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 15px;
+        }
+
+        .btn-double-slide::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: white;
+            color: #19064d;
+            top: -150%;
+            left: -150%;
+            transition: all 0.7s ease;
+        }
+
+        .btn-double-slide:hover::before {
+            top: 0;
+            left: 0;
+        }
+
+        .btn-double-slide span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-double-slide.active {
+            background-color: rgba(225, 215, 215, 0.5);
+            color: black;
+            font-weight: bold;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .bi-pencil {
+            cursor: pointer;
+            position: absolute;
+            top: 35px;
+            right: 10px;
+        }
+
+        .card-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px outset #158e94;
+            padding-top: 20px;
+            border-radius: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .dropdown-label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .dropdown-label img {
+            margin-right: 10px;
+        }
+
+        .badge {
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            padding: 0;
+            list-style: none;
+            width: 250px;
+            border-radius: 5px;
+            max-height: 500px;
+            overflow-y: auto;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10%);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .super-admin-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .admin-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div class="sidebar col-md-2">
+            <h3 class="text-center fw-bold text-light">Admin Panel</h3>
+            <hr>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/A-Home.html';">
+                <span><i class="bi bi-house-door"></i> Dashboard</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Manage-Users.html';">
+                <span><i class="bi bi-people"></i> Plans Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/User_Management.html';">
+                <span><i class="bi bi-person-lines-fill"></i> User Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Reports.html';">
+                <span><i class="bi bi-graph-up"></i> Analysis</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/ConfigureFAQs.html';">
+                <span><i class="bi bi-gear"></i> Configure FAQs</span>
+            </button>
+            <button class="btn btn-double-slide active mt-2" onclick="window.location.href='../Admin/Settings.html';">
+                <span><i class="bi bi-gear"></i> Settings</span>
+            </button>
+        </div>
+
+        <div class="col-md-10 p-3 d-flex flex-column align-items-center">
+            <nav class="navbar navbar-expand-lg bg-danger navbar-dark px-3 rounded w-100">
+                <h3 id="dashboard">Settings</h3>
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown" id="messagesDropdown">
+                        <div class="dropdown-label me-2">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/chat-message.png" alt="Messages" />
+                            <span class="badge" id="messageBadge">0</span>
+                        </div>
+                        <ul class="dropdown-menu" id="messagesList"></ul>
+                    </div>
+                    <div class="dropdown" id="notificationsDropdown">
+                        <div class="dropdown-label me-4">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/appointment-reminders.png"
+                                alt="Notifications" />
+                            <span class="badge" id="notificationBadge">0</span>
+                        </div>
+                        <ul class="dropdown-menu" id="notificationsList"></ul>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
+                            role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="35" height="35"
+                                src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/user--v1.png" alt="user"
+                                class="rounded-circle me-0">
+                            <span id="adminName">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout();"><i
+                                        class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <hr class="w-100">
+
+            <div class="col-md-10">
+                <h3 id="settings" class="mt-5 text-center">Manage Profile</h3>
+                <div class="container mt-4">
+                    <div class="card-group">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Account Settings</h5>
+                                        <form id="accountForm">
+                                            <div class="mb-3 position-relative">
+                                                <label for="username" class="form-label">Username</label>
+                                                <input type="text" class="form-control" id="username" readonly>
+                                                <i class="bi bi-pencil" onclick="enableEdit('username')"></i>
+                                            </div>
+                                            <div class="mb-3 position-relative">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" readonly>
+                                                <i class="bi bi-pencil" onclick="enableEdit('email')"></i>
+                                            </div>
+                                            <div class="mb-3 position-relative">
+                                                <label for="password" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="password" readonly>
+                                                <i class="bi bi-pencil" onclick="enableEdit('password')"></i>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary rounded-pill"
+                                                onclick="saveAccountChanges()">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Notification Settings</h5>
+                                        <form id="notificationForm">
+                                            <div class="mb-3">
+                                                <label for="emailNotifications" class="form-label">Email
+                                                    Notifications</label>
+                                                <select class="form-control" id="emailNotifications"
+                                                    onchange="loadNotifications()">
+                                                    <option value="true">Enabled</option>
+                                                    <option value="false">Disabled</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="smsNotifications" class="form-label">SMS
+                                                    Notifications</label>
+                                                <select class="form-control" id="smsNotifications"
+                                                    onchange="loadNotifications()">
+                                                    <option value="true">Enabled</option>
+                                                    <option value="false">Disabled</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary rounded-pill"
+                                                onclick="saveNotificationSettings()">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Admin Settings</h5>
+                                        <form id="securityForm">
+                                            <div class="mb-3">
+                                                <label for="superAdmin" class="form-label">Super Admin</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="superAdmin"
+                                                        onchange="promptSuperAdminKeyword()">
+                                                    <label class="form-check-label" for="superAdmin"></label>
+                                                </div>
+                                            </div>
+                                            <div class="super-admin-section" id="superAdminOptions">
+                                                <div class="mb-3">
+                                                    <label for="newAdminEmail" class="form-label">Add New Admin
+                                                        (Email)</label>
+                                                    <input type="email" class="form-control" id="newAdminEmail"
+                                                        placeholder="Enter new admin email">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="newAdminPassword" class="form-label">New Admin
+                                                        Password</label>
+                                                    <input type="password" class="form-control" id="newAdminPassword"
+                                                        placeholder="Enter password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="newAdminUserId" class="form-label">New Admin User
+                                                        ID</label>
+                                                    <input type="text" class="form-control" id="newAdminUserId"
+                                                        placeholder="e.g., ADMIN002">
+                                                </div>
+                                                <button type="button" class="btn btn-primary"
+                                                    onclick="addNewAdmin()">Add Admin</button>
+                                                <div class="mt-3">
+                                                    <h6>Manage Admins</h6>
+                                                    <table class="admin-table table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>User ID</th>
+                                                                <th>Email</th>
+                                                                <th>Status</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="adminTableBody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary rounded-pill mt-3"
+                                                onclick="saveAdminSettings()">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Language Settings</h5>
+                                        <form id="languageForm">
+                                            <div class="mb-3">
+                                                <label for="language" class="form-label">Language</label>
+                                                <select class="form-control" id="language" onchange="applyLanguage()">
+                                                    <option value="english">English</option>
+                                                    <option value="spanish">Spanish</option>
+                                                    <option value="french">French</option>
+                                                    <option value="german">German</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary rounded-pill"
+                                                onclick="saveLanguageSettings()">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const backendUrl = 'http://localhost:8082';
+        let adminId = null;
+        let emailNotificationsEnabled = true;
+        let smsNotificationsEnabled = true;
+        const SUPER_ADMIN_KEYWORD = "supersecret";
+
+        const mockMessages = [
+            { sender: "John Doe", content: "Hello, I need help...", time: "10:30 AM" },
+            { sender: "Jane Smith", content: "Account issue...", time: "10:45 AM" }
+        ];
+        const mockNotifications = [
+            { content: "Project Deadline today", time: "09:00 AM" },
+            { content: "Security alert", time: "08:45 AM" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+            const adminEmail = localStorage.getItem('adminEmail');
+
+            if (!token || role !== 'ROLE_ADMIN' || !adminEmail) {
+                alert('Unauthorized access. Please log in as an admin.');
+                window.location.href = '../FrontEnd/AdminLogin.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/by-email/${adminEmail}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        alert('Session expired or unauthorized. Please log in again.');
+                        logout();
+                    }
+                    throw new Error('Failed to fetch admin data');
+                }
+
+                const adminData = await response.json();
+                adminId = adminData.adminId;
+                localStorage.setItem('adminUserId', adminData.adminUserId);
+                initializeForm(adminData);
+                loadNotifications();
+                if (adminData.superAdmin) fetchAdmins();
+            } catch (error) {
+                console.error('Error fetching admin data:', error);
+                alert('Error loading admin data. Redirecting to login.');
+                logout();
+            }
+        });
+
+        function enableEdit(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.removeAttribute('readonly');
+            field.focus();
+        }
+
+        function initializeForm(adminData) {
+            document.getElementById('adminName').textContent = adminData.name || 'Admin';
+            document.getElementById('username').value = adminData.name || '';
+            document.getElementById('email').value = adminData.email || '';
+            document.getElementById('password').value = '**********';
+
+            emailNotificationsEnabled = adminData.emailNotifications;
+            smsNotificationsEnabled = adminData.smsNotifications;
+            document.getElementById('emailNotifications').value = adminData.emailNotifications ? 'true' : 'false';
+            document.getElementById('smsNotifications').value = adminData.smsNotifications ? 'true' : 'false';
+            document.getElementById('superAdmin').checked = adminData.superAdmin;
+            document.getElementById('language').value = adminData.language || 'english';
+
+            toggleSuperAdminOptions();
+            applyLanguage();
+            ['username', 'email', 'password'].forEach(id => {
+                document.getElementById(id).setAttribute('readonly', true);
+            });
+        }
+
+        async function saveAccountChanges() {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId) {
+                alert('Session expired. Please log in again.');
+                logout();
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const adminDetails = {
+                name: username,
+                email: email,
+                password: password === '**********' ? undefined : password,
+                adminUserId: localStorage.getItem('adminUserId'),
+                role: 'ROLE_ADMIN',
+                status: true,
+                emailNotifications: emailNotificationsEnabled,
+                smsNotifications: smsNotificationsEnabled,
+                superAdmin: document.getElementById('superAdmin').checked,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/update/${adminId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adminDetails)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Failed to update account settings'}`);
+                    return;
+                }
+
+                const updatedAdmin = await response.json();
+                localStorage.setItem('adminEmail', updatedAdmin.email);
+                alert('Account settings saved successfully!');
+                ['username', 'email', 'password'].forEach(id => {
+                    document.getElementById(id).setAttribute('readonly', true);
+                });
+            } catch (error) {
+                console.error('Error saving account changes:', error);
+                alert('Failed to save account changes. Please try again.');
+            }
+        }
+
+        async function saveNotificationSettings() {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId) {
+                alert('Session expired. Please log in again.');
+                logout();
+                return;
+            }
+
+            emailNotificationsEnabled = document.getElementById('emailNotifications').value === 'true';
+            smsNotificationsEnabled = document.getElementById('smsNotifications').value === 'true';
+
+            const adminDetails = {
+                name: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                adminUserId: localStorage.getItem('adminUserId'),
+                role: 'ROLE_ADMIN',
+                status: true,
+                emailNotifications: emailNotificationsEnabled,
+                smsNotifications: smsNotificationsEnabled,
+                superAdmin: document.getElementById('superAdmin').checked,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/update/${adminId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adminDetails)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Failed to update settings'}`);
+                    return;
+                }
+
+                alert('Notification settings saved successfully!');
+                loadNotifications();
+            } catch (error) {
+                console.error('Error saving notification settings:', error);
+                alert('Failed to save notification settings. Please try again.');
+            }
+        }
+
+        function promptSuperAdminKeyword() {
+            const superAdminCheckbox = document.getElementById('superAdmin');
+            if (superAdminCheckbox.checked) {
+                const keyword = prompt('Enter the super admin keyword:');
+                if (keyword !== SUPER_ADMIN_KEYWORD) {
+                    alert('Incorrect keyword. Super admin access denied.');
+                    superAdminCheckbox.checked = false;
+                    toggleSuperAdminOptions();
+                    return;
+                }
+            }
+            toggleSuperAdminOptions();
+            if (superAdminCheckbox.checked) fetchAdmins();
+        }
+
+        async function saveAdminSettings() {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId) {
+                alert('Session expired. Please log in again.');
+                logout();
+                return;
+            }
+
+            const adminDetails = {
+                name: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                adminUserId: localStorage.getItem('adminUserId'),
+                role: 'ROLE_ADMIN',
+                status: true,
+                emailNotifications: emailNotificationsEnabled,
+                smsNotifications: smsNotificationsEnabled,
+                superAdmin: document.getElementById('superAdmin').checked,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/update/${adminId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adminDetails)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Failed to update settings'}`);
+                    return;
+                }
+
+                alert('Admin settings saved successfully!');
+                if (adminDetails.superAdmin) fetchAdmins();
+            } catch (error) {
+                console.error('Error saving admin settings:', error);
+                alert('Failed to save admin settings. Please try again.');
+            }
+        }
+
+        async function addNewAdmin() {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId || !document.getElementById('superAdmin').checked) {
+                alert('Only super admins can add new admins. Please enable Super Admin and save settings.');
+                return;
+            }
+
+            const newAdminEmail = document.getElementById('newAdminEmail').value;
+            const newAdminPassword = document.getElementById('newAdminPassword').value;
+            const newAdminUserId = document.getElementById('newAdminUserId').value;
+
+            if (!newAdminEmail || !newAdminPassword || !newAdminUserId) {
+                alert('Please provide email, password, and user ID for the new admin.');
+                return;
+            }
+
+            const newAdmin = {
+                email: newAdminEmail,
+                password: newAdminPassword,
+                name: newAdminEmail.split('@')[0],
+                adminUserId: newAdminUserId,
+                role: 'ROLE_ADMIN',
+                status: true,
+                emailNotifications: true,
+                smsNotifications: true,
+                superAdmin: false,
+                language: 'english'
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newAdmin)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Failed to add new admin'}`);
+                    return;
+                }
+
+                alert('New admin added successfully!');
+                document.getElementById('newAdminEmail').value = '';
+                document.getElementById('newAdminPassword').value = '';
+                document.getElementById('newAdminUserId').value = '';
+                fetchAdmins();
+            } catch (error) {
+                console.error('Error adding new admin:', error);
+                alert('Failed to add new admin. Please try again.');
+            }
+        }
+
+        async function fetchAdmins() {
+            const token = localStorage.getItem('token');
+            if (!token || !document.getElementById('superAdmin').checked) return;
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/all`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch admins');
+                }
+
+                const admins = await response.json();
+                const tableBody = document.getElementById('adminTableBody');
+                tableBody.innerHTML = '';
+                admins.forEach(admin => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${admin.adminUserId}</td>
+                        <td>${admin.email}</td>
+                        <td>
+                            <input type="checkbox" ${admin.status ? 'checked' : ''} onchange="toggleAdminStatus(${admin.adminId}, this.checked)" />
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editAdmin(${admin.adminId})">Edit</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error fetching admins:', error);
+            }
+        }
+
+        async function toggleAdminStatus(adminIdToToggle, isEnabled) {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId) return;
+
+            const currentAdminResponse = await fetch(`${backendUrl}/api/admin/${adminIdToToggle}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!currentAdminResponse.ok) {
+                alert('Failed to fetch admin details for update.');
+                fetchAdmins();
+                return;
+            }
+
+            const currentAdmin = await currentAdminResponse.json();
+            const adminDetails = {
+                name: currentAdmin.name,
+                email: currentAdmin.email,
+                adminUserId: currentAdmin.adminUserId,
+                role: currentAdmin.role,
+                status: isEnabled,
+                emailNotifications: currentAdmin.emailNotifications,
+                smsNotifications: currentAdmin.smsNotifications,
+                superAdmin: currentAdmin.superAdmin,
+                language: currentAdmin.language
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/update/${adminIdToToggle}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adminDetails)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Failed to update admin status'}`);
+                    fetchAdmins();
+                    return;
+                }
+
+                alert(`Admin ${isEnabled ? 'enabled' : 'disabled'} successfully!`);
+                fetchAdmins();
+            } catch (error) {
+                console.error('Error toggling admin status:', error);
+                alert('Failed to toggle admin status. Please try again.');
+                fetchAdmins();
+            }
+        }
+
+        async function editAdmin(adminIdToEdit) {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId) return;
+
+            // Fetch current admin details
+            const response = await fetch(`${backendUrl}/api/admin/${adminIdToEdit}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                alert('Failed to fetch admin details.');
+                return;
+            }
+
+            const admin = await response.json();
+
+            const newName = prompt('Enter new name for this admin:', admin.name) || admin.name;
+            const newEmail = prompt('Enter new email for this admin:', admin.email) || admin.email;
+            const newPassword = prompt('Enter new password (leave blank to keep unchanged):') || undefined;
+            const newAdminUserId = prompt('Enter new admin user ID:', admin.adminUserId) || admin.adminUserId;
+
+            const adminDetails = {
+                name: newName,
+                email: newEmail,
+                password: newPassword,
+                adminUserId: newAdminUserId,
+                role: admin.role,
+                status: admin.status,
+                emailNotifications: admin.emailNotifications,
+                smsNotifications: admin.smsNotifications,
+                superAdmin: admin.superAdmin,
+                language: admin.language
+            };
+
+            try {
+                const updateResponse = await fetch(`${backendUrl}/api/admin/update/${adminIdToEdit}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adminDetails)
+                });
+
+                if (!updateResponse.ok) {
+                    const errorData = await updateResponse.json();
+                    alert(`Error: ${errorData.message || 'Failed to update admin'}`);
+                    return;
+                }
+
+                alert('Admin updated successfully!');
+                fetchAdmins();
+            } catch (error) {
+                console.error('Error editing admin:', error);
+                alert('Failed to edit admin. Please try again.');
+            }
+        }
+
+        async function saveLanguageSettings() {
+            const token = localStorage.getItem('token');
+            if (!token || !adminId) {
+                alert('Session expired. Please log in again.');
+                logout();
+                return;
+            }
+
+            const adminDetails = {
+                name: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                adminUserId: localStorage.getItem('adminUserId'),
+                role: 'ROLE_ADMIN',
+                status: true,
+                emailNotifications: emailNotificationsEnabled,
+                smsNotifications: smsNotificationsEnabled,
+                superAdmin: document.getElementById('superAdmin').checked,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/admin/update/${adminId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adminDetails)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Failed to update settings'}`);
+                    return;
+                }
+
+                alert('Language settings saved successfully!');
+                applyLanguage();
+            } catch (error) {
+                console.error('Error saving language settings:', error);
+                alert('Failed to save language settings. Please try again.');
+            }
+        }
+
+        function toggleSuperAdminOptions() {
+            const superAdmin = document.getElementById('superAdmin').checked;
+            document.getElementById('superAdminOptions').style.display = superAdmin ? 'block' : 'none';
+        }
+
+        function applyLanguage() {
+            const language = document.getElementById('language').value;
+            const translations = {
+                english: { dashboard: "Settings", manageProfile: "Manage Profile", accountSettings: "Account Settings", notificationSettings: "Notification Settings", adminSettings: "Admin Settings", languageSettings: "Language Settings" },
+                spanish: { dashboard: "Configuraciones", manageProfile: "Gestionar Perfil", accountSettings: "Configuraciones de Cuenta", notificationSettings: "Configuraciones de Notificación", adminSettings: "Configuraciones de Admin", languageSettings: "Configuraciones de Idioma" },
+                french: { dashboard: "Paramètres", manageProfile: "Gérer le Profil", accountSettings: "Paramètres du Compte", notificationSettings: "Paramètres de Notification", adminSettings: "Paramètres Admin", languageSettings: "Paramètres de Langue" },
+                german: { dashboard: "Einstellungen", manageProfile: "Profil Verwalten", accountSettings: "Kontoeinstellungen", notificationSettings: "Benachrichtigungseinstellungen", adminSettings: "Admin-Einstellungen", languageSettings: "Spracheinstellungen" }
+            };
+            document.getElementById('dashboard').textContent = translations[language].dashboard;
+            document.getElementById('settings').textContent = translations[language].manageProfile;
+            document.querySelectorAll('.card-title')[0].textContent = translations[language].accountSettings;
+            document.querySelectorAll('.card-title')[1].textContent = translations[language].notificationSettings;
+            document.querySelectorAll('.card-title')[2].textContent = translations[language].adminSettings;
+            document.querySelectorAll('.card-title')[3].textContent = translations[language].languageSettings;
+        }
+
+        function loadNotifications() {
+            const messagesList = document.getElementById('messagesList');
+            const notificationsList = document.getElementById('notificationsList');
+            messagesList.innerHTML = '';
+            notificationsList.innerHTML = '';
+
+            emailNotificationsEnabled = document.getElementById('emailNotifications').value === 'true';
+            smsNotificationsEnabled = document.getElementById('smsNotifications').value === 'true';
+
+            if (emailNotificationsEnabled) {
+                mockMessages.forEach(msg => {
+                    const li = document.createElement('li');
+                    li.className = 'dropdown-item';
+                    li.innerHTML = `
+                        <img src="https://img.icons8.com/color/48/000000/user.png" alt="User Icon" style="width: 20px; height: 20px;">
+                        <div class="text">${msg.sender}<br><p>${msg.content}</p></div>
+                        <div class="timestamp">${msg.time}</div>`;
+                    messagesList.appendChild(li);
+                });
+                document.getElementById('messageBadge').textContent = mockMessages.length;
+                document.getElementById('messagesDropdown').style.display = 'block';
+            } else {
+                document.getElementById('messagesDropdown').style.display = 'none';
+            }
+
+            if (smsNotificationsEnabled) {
+                mockNotifications.forEach(notif => {
+                    const li = document.createElement('li');
+                    li.className = 'dropdown-item';
+                    li.innerHTML = `
+                        <img src="https://img.icons8.com/color/48/000000/calendar.png" alt="Calendar Icon" style="width: 20px; height: 20px;">
+                        <div class="text">${notif.content}</div>
+                        <div class="timestamp">${notif.time}</div>`;
+                    notificationsList.appendChild(li);
+                });
+                document.getElementById('notificationBadge').textContent = mockNotifications.length;
+                document.getElementById('notificationsDropdown').style.display = 'block';
+            } else {
+                document.getElementById('notificationsDropdown').style.display = 'none';
+            }
+        }
+
+        async function logout() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    await fetch(`${backendUrl}/api/admin/logout`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error during logout:', error);
+                }
+            }
+            localStorage.clear();
+            window.location.href = '../FrontEnd/AdminLogin.html';
+        }
+    </script>
+</body>
+
+</html>

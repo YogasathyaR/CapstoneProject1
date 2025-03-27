@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Plans2</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link href="../css/main.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: white;
+            position: relative;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #008080, #022b53);
+            padding: 13px 0;
+            animation: navSlide 0.8s ease-out;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .account-img-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        footer {
+            background-color: #015b5b;
+        }
+
+        footer a:hover {
+            color: #f8f9fa !important;
+            text-decoration: underline !important;
+        }
+
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            z-index: 1000;
+            animation: move 0.5s infinite alternate;
+        }
+
+        .whatsapp-widget img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Payment Container */
+        .payment-container {
+            margin: 4rem auto;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(148, 137, 10, 0.5);
+            max-width: 1100px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .payment-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #1a0033;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 767px) {
+            .payment-container .row {
+                flex-direction: column-reverse;
+            }
+
+            .summary-card {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Payment Options */
+        .payment-option {
+            background: linear-gradient(135deg, #f0f4f8, #e0e7ec);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-option:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #e0e7ec, #d0d9df);
+        }
+
+        .payment-option.active {
+            background: linear-gradient(135deg, #7b00ff, #00b7c2);
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(123, 0, 255, 0.3);
+        }
+
+        .payment-option h5 {
+            font-size: 1.3rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-option i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-option:hover i {
+            transform: scale(1.2);
+        }
+
+        .payment-option.active h5,
+        .payment-option.active p {
+            color: #fff;
+        }
+
+        .payment-form {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .payment-form.active {
+            max-height: 600px;
+            padding: 1.5rem;
+        }
+
+        .form-control,
+        .form-select {
+            border: 2px solid #7b00ff;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #00b7c2;
+            box-shadow: 0 0 8px rgba(0, 183, 194, 0.3);
+            outline: none;
+        }
+
+        .btn-pay {
+            background: linear-gradient(to right, #7b00ff, #00b7c2);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-pay:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(123, 0, 255, 0.4);
+            color: #fff;
+        }
+
+        /* Recharge Summary Design */
+        .summary-card {
+            background: linear-gradient(135deg, #fff, #f0f4f8);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(90deg, #7b00ff, #00b7c2);
+            z-index: -1;
+            border-radius: 22px;
+            animation: borderGlow 3s infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                filter: brightness(1);
+            }
+
+            100% {
+                filter: brightness(1.5);
+            }
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .summary-card h4 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1a0033;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-card p {
+            font-size: 1.2rem;
+            margin: 0.8rem 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+        .summary-card p strong {
+            color: #7b00ff;
+        }
+
+        .summary-card hr {
+            border-top: 3px dashed #00b7c2;
+            margin: 1rem 0;
+        }
+
+        .summary-card .total {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #1a0033;
+            text-align: right;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #00b7c2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Payment Success Modal */
+        .modal-dialog {
+            max-width: 400px;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border: none;
+            overflow: hidden;
+            position: relative;
+            animation: popIn 0.5s ease-out;
+        }
+
+        payment-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .btn-pay {
+            background: linear-gradient(to right, #7b00ff, #00b7c2);
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-pay:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(123, 0, 255, 0.4);
+        }
+
+        .modal-content1 {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            border-radius: 15px;
+        }
+
+        .modal-header1 {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            justify-content: center;
+        }
+
+        .modal-body1 {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00b7c2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #7b00ff, #00b7c2);
+            border: none;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .modal-header i {
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1;
+            position: relative;
+        }
+
+        .modal-header i.show-tick {
+            display: block;
+            animation: bounceIn 0.8s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .modal-body {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .modal-body h3 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1a0033;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body p {
+            font-size: 1.1rem;
+            color: #555;
+            margin: 0.5rem 0;
+        }
+
+        .modal-body .amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00b7c2;
+            margin: 1rem 0;
+        }
+
+        .modal-body .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .modal-body .btn-modal {
+            background: linear-gradient(to right, #7b00ff, #00b7c2);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            width: 48%;
+            cursor: pointer;
+        }
+
+        .modal-body .btn-modal:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(123, 0, 255, 0.4);
+        }
+
+        .modal-body .btn-history {
+            background: linear-gradient(to right, #00b7c2, #7b00ff);
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .change-number-input {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+
+            .modal-dialog {
+                margin: 10px;
+                max-width: 90%;
+            }
+
+            .modal-content {
+                padding: 10px;
+            }
+
+            .modal-header {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.2rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .change-number-input {
+                font-size: 14px;
+                padding: 0.5rem;
+            }
+
+            #changeNumberError {
+                font-size: 0.85rem;
+            }
+
+            .modal-footer {
+                padding: 0.5rem;
+            }
+
+            .modal-footer .btn {
+                width: 100%;
+                padding: 0.6rem;
+                font-size: 14px;
+            }
+
+            .summary-card .btn-link {
+                width: 100%;
+                margin-top: 10px;
+                font-size: 0.85rem;
+                padding: 8px;
+                display: block;
+            }
+
+            footer .container-fluid {
+                padding: 0;
+            }
+
+            footer .row {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            footer .col-md-2,
+            footer .col-md-6 {
+                width: 100%;
+                padding: 15px;
+            }
+
+            footer h6,
+            footer h5 {
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+
+            footer ul.list-unstyled li {
+                margin: 5px 0;
+            }
+
+            footer ul.list-unstyled li a {
+                font-size: 0.9rem;
+            }
+
+            footer .text-md-end {
+                text-align: center;
+            }
+
+            footer img {
+                width: 30px;
+                height: 30px;
+                margin: 5px;
+            }
+
+            footer .text-center p {
+                font-size: 0.85rem;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            .modal-dialog {
+                max-width: 95%;
+            }
+
+            .modal-title {
+                font-size: 1rem;
+            }
+
+            .modal-body {
+                padding: 0.75rem;
+            }
+
+            .change-number-input {
+                font-size: 12px;
+                padding: 0.4rem;
+            }
+
+            #changeNumberError {
+                font-size: 0.75rem;
+            }
+
+            .modal-footer .btn {
+                font-size: 12px;
+                padding: 0.5rem;
+            }
+
+            .summary-card .btn-link {
+                font-size: 0.75rem;
+                padding: 6px;
+            }
+
+            footer h6,
+            footer h5 {
+                font-size: 0.9rem;
+            }
+
+            footer ul.list-unstyled li a {
+                font-size: 0.8rem;
+            }
+
+            footer img {
+                width: 25px;
+                height: 25px;
+            }
+
+            footer .text-center p {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="whatsapp-widget">
+        <a href="../FrontEnd/Support.html">
+            <img src="../Assets/Icons/iconNew.png" alt="WhatsApp">
+        </a>
+    </div>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5" href="../FrontEnd/Home.html">MOBI-COMM</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav ms-auto me-5">
+                        <li class="nav-item"><a class="nav-link" href="../FrontEnd/FAQ.html">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../FrontEnd/Support.html">Help</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="true">
+                                <img class="account-img-icon" src="../Assets/Icons/icon2.png" alt="User Icon" width="26"
+                                    height="26">
+                                Account
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                <li><a class="dropdown-item" href="../FrontEnd/Profile.html">Manage
+                                        Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#mobileModal">Log in</a></li>
+                                <li><a class="dropdown-item" href="../FrontEnd/FirstandLast.html">Log
+                                        out</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Modal for Log in --><!-- To check whether the modal open using js, just type "new bootstrap.Modal(document.getElementById('mobileModal')).show();"  -->
+        <div class="modal fade" id="mobileModal" tabindex="-1" aria-labelledby="mobileModalLabel" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center" id="mobileModalLabel">Log In</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <label for="mobileNumber" class="form-label mt-1">Mobile
+                            Number</label>
+                        <div class="d-flex justify-content-center">
+                            <input type="text" id="mobileNumber" class="form-control mt-2"
+                                placeholder="Enter your mobile number">
+                        </div>
+                        <div id="errorMessage" class="text-danger mt-2" style="display: none;">
+                            Invalid
+                            mobile number! Please give your Registered number.
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: none;">
+                        <button type="button" class="btn-info-color me-3" onclick="verifyNumber()">Log
+                            in</button>
+                    </div>
+                    <div class="text-center mb-4">
+                        <a class="text-decoration-none text-center" href="#">Sign Up!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bread Crumb -->
+        <div class="d-flex justify-content-between align-items-center my-2 ms-4">
+            <nav class="breadcrumb1" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="../FrontEnd/Home.html">Home</a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="../FrontEnd/Plans.html">Recharge</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color: #a3a1a1;">Buy Plan</li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+    <main>
+
+        <!-- Loader -->
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="container payment-container">
+            <h2 class="payment-title">Complete Your Recharge</h2>
+            <div class="row">
+                <!-- Recharge Summary -->
+                <div class="col-md-5 summary-section">
+                    <div class="summary-card">
+                        <h4>Recharge Summary</h4>
+                        <p><strong>Mobile Number:</strong> <span id="mobile-number"></span></p>
+                        <p><strong>Plan Title:</strong> <span id="plan-title"></span></p>
+                        <p><strong>Price:</strong> <span id="plan-price"></span></p>
+                        <p><strong>Validity:</strong> <span id="plan-validity"></span></p>
+                        <p><strong>Details:</strong> <span id="plan-details"></span></p>
+                        <p><strong>Extras:</strong> <span id="plan-extras"></span></p>
+                        <hr>
+                        <h5 class="total">Total: <span id="total-price"></span></h5>
+                    </div>
+                </div>
+
+                <!-- Simplified Payment Section -->
+                <div class="col-md-7 payment-section">
+                    <button type="button" class="btn btn-pay" id="payNowBtn">Pay Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Success Modal -->
+        <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal-content1">
+                    <div class="modal-header modal-header1">
+                        <h5 class="modal-title">Payment Successful!</h5>
+                    </div>
+                    <div class="modal-body modal-body1">
+                        <div class="spinner" id="paymentSpinner"></div>
+                        <p id="processingMessage">Processing your payment...</p>
+                        <p id="emailMessage" style="display: none;">Sending confirmation email...</p>
+                        <p id="redirectMessage" style="display: none;">Your recharge has been processed successfully.
+                        </p>
+                        <div class="btn-container" id="redirectButtons" style="display: none;">
+                            <button type="button" class="btn-modal" id="homeBtn">Home</button>
+                            <button type="button" class="btn-modal btn-history" id="historyBtn">Payment History</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 text-md-start p-4">
+                <h6 class="fw-bold text-light">Information</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-light">About Us</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Privacy Policy</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Terms of use</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-2 text-md-start p-4">
+                <h6 class="fw-bold text-light">Information</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-light">Features & Benefits</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Plans & Pricing</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Security & Privacy</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Referral Program</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-2 text-md-start p-4">
+                <h6 class="fw-bold text-light">Support</h6>
+                <ul class="list-unstyled">
+                    <li><a href="../FrontEnd/Support.html" class="text-decoration-none text-light">Help
+                            Center</a></li>
+                    <li><a href="../FrontEnd/FAQ.html" class="text-decoration-none text-light">FAQs</a></li>
+                    <li><a href="../FrontEnd/Support.html" class="text-decoration-none text-light">Live
+                            Chat</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-md-end p-4">
+                <h5 class="fw-bold text-light">Mobi-Comm</h5>
+                <h6 class="text-light">Connect With Us!</h6>
+                <div>
+                    <a href="#" class="me-2">
+                        <img width="35" height="35" src="https://img.icons8.com/color/48/facebook-new.png"
+                            alt="facebook-new">
+                    </a>
+                    <a href="#" class="me-2">
+                        <img width="35" height="35" src="https://img.icons8.com/color/48/twitter-circled--v1.png"
+                            alt="twitter-circled--v1" />
+                    </a>
+                    <a href="#" class="me-2">
+                        <img width="35" height="35" src="https://img.icons8.com/color-glass/48/youtube-play.png"
+                            alt="youtube-play" />
+                    </a>
+                    <a href="#">
+                        <img width="35" height="35" src="https://img.icons8.com/3d-fluency/94/instagram-new.png"
+                            alt="instagram-new" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <p class="p-4 text-light">&copy; 2025 Mobile Prepaid Recharge. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const backendUrl = 'http://localhost:8082';
+        let isProcessingPayment = false;
+        let emailSent = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const selectedPlan = JSON.parse(localStorage.getItem('selectedPlan'));
+            const verifiedMobileNumber = localStorage.getItem('verifiedMobileNumber');
+
+            if (!token || !selectedPlan || !verifiedMobileNumber) {
+                handleUnauthorized();
+                return;
+            }
+
+            document.getElementById('mobile-number').textContent = verifiedMobileNumber;
+            document.getElementById('plan-title').textContent = selectedPlan.title;
+            document.getElementById('plan-price').textContent = `₹${selectedPlan.price}`;
+            document.getElementById('plan-validity').textContent = selectedPlan.validity;
+            document.getElementById('plan-details').textContent = selectedPlan.details;
+            document.getElementById('plan-extras').textContent = selectedPlan.extras || 'None';
+            document.getElementById('total-price').textContent = `₹${selectedPlan.price}`;
+
+            const payNowBtn = document.getElementById('payNowBtn');
+            payNowBtn.removeEventListener('click', initiateRazorpayPayment);
+            payNowBtn.addEventListener('click', () => {
+                console.log('Pay Now clicked, Plan:', selectedPlan);
+                initiateRazorpayPayment(selectedPlan, verifiedMobileNumber);
+            });
+
+            updateNavbar();
+        });
+
+        async function initiateRazorpayPayment(plan, mobileNumber) {
+            if (isProcessingPayment) {
+                console.log('Payment already in progress, skipping...');
+                return;
+            }
+            isProcessingPayment = true;
+            emailSent = false;
+
+            const email = localStorage.getItem('userEmail') || 'default@example.com';
+            const token = localStorage.getItem('token');
+            const userId = localStorage.getItem('userId');
+
+            console.log('Initiating Razorpay payment with plan:', plan);
+
+            const options = {
+                key: 'rzp_test_5cYt4eDP2RCvjy',
+                amount: parseInt(plan.price) * 100,
+                currency: 'INR',
+                name: 'Mobi-Comm',
+                description: `Recharge Plan: ${plan.title}`,
+                handler: async function (response) {
+                    const paymentId = response.razorpay_payment_id;
+                    console.log('Payment successful, paymentId:', paymentId);
+
+                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    const spinner = document.getElementById('paymentSpinner');
+                    const processingMessage = document.getElementById('processingMessage');
+                    const emailMessage = document.getElementById('emailMessage');
+                    const redirectMessage = document.getElementById('redirectMessage');
+                    const redirectButtons = document.getElementById('redirectButtons');
+
+                    successModal.show();
+                    spinner.style.display = 'block';
+                    processingMessage.style.display = 'block';
+                    emailMessage.style.display = 'none';
+                    redirectMessage.style.display = 'none';
+                    redirectButtons.style.display = 'none';
+
+                    const rechargeData = {
+                        userId: parseInt(userId),
+                        planId: plan.id ? parseInt(plan.id) : null,
+                        mobileNumber: mobileNumber,
+                        planTitle: plan.title,
+                        price: parseFloat(plan.price),
+                        validity: plan.validity,
+                        details: plan.details,
+                        extras: plan.extras || "None",
+                        timestamp: new Date().toISOString(),
+                        paymentMethod: "Razorpay",
+                        status: "successful",
+                        paymentId: paymentId
+                    };
+
+                    try {
+                        // Save recharge
+                        const saveResponse = await fetch(`${backendUrl}/api/recharge/save`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(rechargeData)
+                        });
+
+                        if (!saveResponse.ok) throw new Error('Failed to save recharge');
+                        console.log('Recharge saved successfully');
+
+                        // Process email and modal updates
+                        spinner.style.display = 'none';
+                        processingMessage.style.display = 'none';
+                        emailMessage.style.display = 'block';
+
+                        if (!emailSent) {
+                            console.log('Sending email with plan:', plan);
+                            await sendPaymentSuccessEmail(plan, email);
+                            emailSent = true;
+                        }
+
+                        setTimeout(() => {
+                            emailMessage.style.display = 'none';
+                            redirectMessage.style.display = 'block';
+                            redirectButtons.style.display = 'flex';
+                            isProcessingPayment = false;
+                        }, 2000);
+                    } catch (error) {
+                        console.error('Error during payment process:', error);
+                        alert(`Payment successful, but there was an error: ${error.message}`);
+                        successModal.hide();
+                        isProcessingPayment = false;
+                    }
+                },
+                prefill: {
+                    contact: mobileNumber,
+                    email: email
+                },
+                theme: { color: '#182848' }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        async function sendPaymentSuccessEmail(plan, email) {
+            const planDetails = {
+                name: plan.title,
+                price: `₹${plan.price}`,
+                validity: plan.validity,
+                data: plan.details.split(',')[1].trim(),
+                calls: plan.details.split(',')[0].trim(),
+                sms: plan.details.split(',')[2].trim(),
+                extras: plan.extras || "None",
+                paymentDate: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+            };
+
+            console.log('Email payload:', { email, planDetails });
+
+            try {
+                const response = await fetch(`${backendUrl}/api/send-payment-success-email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, plan: planDetails })
+                });
+
+                if (!response.ok) throw new Error('Failed to send email');
+                console.log('Email sent successfully');
+            } catch (error) {
+                console.error('Error sending email:', error);
+            }
+        }
+
+        document.getElementById('homeBtn')?.addEventListener('click', () => {
+            window.location.href = '../FrontEnd/Home.html';
+        });
+
+        document.getElementById('historyBtn')?.addEventListener('click', () => {
+            window.location.href = '../FrontEnd/PaymentHistory.html';
+        });
+
+        function handleUnauthorized() {
+            localStorage.clear();
+            alert('Session expired or unauthorized access. Please verify your mobile number again.');
+            window.location.href = '../FrontEnd/FirstandLast.html';
+        }
+
+        function updateNavbar() {
+            const token = localStorage.getItem('token');
+            const loginItem = document.querySelector(".dropdown-menu li:nth-child(2)");
+            const logoutItem = document.querySelector(".dropdown-menu li:nth-child(3) a");
+
+            if (token) {
+                loginItem.style.display = 'none';
+                logoutItem.textContent = 'Log out';
+                logoutItem.onclick = logout;
+            } else {
+                loginItem.style.display = 'block';
+                logoutItem.textContent = 'Log out';
+                logoutItem.onclick = null;
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            alert('Logged out successfully!');
+            window.location.href = '../FrontEnd/FirstandLast.html';
+        }
+
+        async function changeMobileNumber() {
+            const token = localStorage.getItem('token');
+            const newMobileNumber = document.getElementById('newMobileNumber').value.trim();
+            const errorMessage = document.getElementById('changeNumberError');
+            const regex = /^[6-9]\d{9}$/;
+
+            if (!regex.test(newMobileNumber)) {
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${backendUrl}/api/users/validate-mobile/${newMobileNumber}`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error('Mobile number validation failed');
+
+                const result = await response.json();
+                if (result.valid) {
+                    errorMessage.style.display = 'none';
+                    localStorage.setItem('verifiedMobileNumber', newMobileNumber);
+                    document.getElementById('mobile-number').textContent = newMobileNumber;
+                    bootstrap.Modal.getInstance(document.getElementById('changeNumberModal')).hide();
+                } else {
+                    errorMessage.textContent = 'Not a registered Mobi-Comm number!';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error updating mobile number:', error);
+                errorMessage.textContent = 'Error validating number. Try again.';
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        async function verifyNumber() {
+            const mobileNumber = document.getElementById('mobileNumber').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            const regex = /^[6-9]\d{9}$/;
+
+            if (!regex.test(mobileNumber)) {
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${backendUrl}/api/auth/verify-mobile`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobileNumber })
+                });
+
+                if (!response.ok) throw new Error('Login failed');
+
+                const result = await response.json();
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('verifiedMobileNumber', mobileNumber);
+                localStorage.setItem('userId', result.userId);
+                localStorage.setItem('userEmail', result.email || '');
+                localStorage.setItem('role', result.role);
+
+                errorMessage.style.display = 'none';
+                bootstrap.Modal.getInstance(document.getElementById('mobileModal')).hide();
+                updateNavbar();
+                window.location.reload();
+            } catch (error) {
+                console.error('Error during login:', error);
+                errorMessage.style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

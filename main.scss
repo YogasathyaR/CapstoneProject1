@@ -1,0 +1,198 @@
+// $primary:green;
+// $secondary:black;
+
+// $primary: #172a43;
+
+// .gradient-bg {
+//   background: linear-gradient(to bottom, #172a43, #EE9797,#213147, #eab4b4);
+// }
+
+.gradient-bg {
+  background: linear-gradient(140deg, #172a43, #EE9797, #292F45, #EE9797);
+}
+
+// background: linear-gradient(to bottom, #172a43, #EE9797, #292F45, #EE9797);
+
+.gradient-background {
+  background: linear-gradient(320deg, #172a43, #292F45, #EE9797);
+}
+
+// $custom-light: #ab4a39;
+
+// .table-custom-light {
+//     background-color: $custom-light;
+//     color: black;
+// }
+
+
+$primary: red;
+$secondary: #1A2A40;
+
+.custom-secondary {
+  background-color: #1A2A40;
+  color: white !important;
+}
+
+.custom-dark {
+  color: #c4c3c3;
+}
+
+$danger: #142237;
+
+.bg-danger {
+  background-color: #39485e;
+  color: white;
+
+  &:hover {
+    background-color: #495362;
+  }
+}
+
+$my-custom-color: #EE9797;
+$dark: #c4c3c3;
+$warning: green;
+
+// $text-color: #FFFFFF;
+// $hover-color: #D86F6F;
+// $info-color:#f1a0a0;
+
+// button {
+//   background-color: $info-color;
+//   color: $text-color;
+//   border: 1px solid $hover-color;
+//   padding: 8px 10px;
+//   border-radius: 10px;
+//   font-weight: bold;
+//   cursor: pointer;
+//   transition: 0.3s;
+
+//   &:hover {
+//     background-color: $hover-color;
+//   }
+// }
+
+$text-color: #FFFFFF;
+$hover-color: rgba(203, 203, 203, 0.5); // Professional transparent hover
+$info-color: #2C3E50; // Dark slate gray
+$nav-footer-color: #37814f; // Dark blue-gray
+$gradient-start: #30363d; // Steel Blue
+$gradient-end: #85929E; // Light Slate Gray
+
+button {
+  background: linear-gradient(135deg, $gradient-start, $gradient-end);
+  color: $text-color;
+  border: 1px solid $hover-color;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: $hover-color;
+    transition: all 0.5s ease-in-out;
+    z-index: 0;
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover::before {
+    left: 0;
+  }
+
+  // &:hover {
+  //   color: $text-color;
+  //   background: transparent;
+  // }
+}
+
+/* Ensure the button styles have maximum specificity */
+.recharge-btn-container .custom-btn.btn-12 {
+  position: relative !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 130px !important;
+  height: 40px !important;
+  line-height: 42px !important;
+  perspective: 230px !important;
+}
+
+.recharge-btn-container .custom-btn.btn-12 span {
+  background: linear-gradient(0deg, rgba(0, 172, 238, 1) 0%, rgba(2, 126, 251, 1) 100%) !important;
+  display: block !important;
+  position: absolute !important;
+  width: 130px !important;
+  height: 40px !important;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    7px 7px 20px 0px rgba(0, 0, 0, .1),
+    4px 4px 5px 0px rgba(0, 0, 0, .1) !important;
+  border-radius: 5px !important;
+  margin: 0 !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  transition: all .3s !important;
+}
+
+.recharge-btn-container .custom-btn.btn-12:hover span:nth-child(1) {
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    7px 7px 20px 0px rgba(0, 0, 0, .1),
+    4px 4px 5px 0px rgba(0, 0, 0, .1) !important;
+  transform: rotateX(0deg) !important;
+}
+
+.recharge-btn-container .custom-btn.btn-12:hover span:nth-child(2) {
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    7px 7px 20px 0px rgba(0, 0, 0, .1),
+    4px 4px 5px 0px rgba(0, 0, 0, .1) !important;
+  color: transparent !important;
+  transform: rotateX(-90deg) !important;
+}
+
+.custom-btn.btn-12[style] {
+  all: unset !important; // Resets all inline styles
+}
+
+
+
+
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+// For Long Screens
+// .gradient-bg {
+//   background: linear-gradient(to bottom, #172a43, #f2bbbb, #292F45, #EE9797);
+// }
+
+
+
+// For Short Screens
+// .gradient-background {
+//   background: linear-gradient(to bottom, #292F45, #EE9797);
+// }
+
+
+
+// body {
+// background: linear-gradient(to right, $info-color, $warning-color);
+// }
+
+// $primary : #EE9797;
+
+// First Given - Perfect
+// .gradient-bg {
+//   background: linear-gradient(140deg, #172a43, #292F45, #EE9797);
+// }
+// #1A2A40

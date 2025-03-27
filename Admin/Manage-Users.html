@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Plans Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../css/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: rgb(232, 227, 227);
+            font-family: 'Arial', sans-serif;
+        }
+
+        label {
+            display: block !important;
+            color: black;
+        }
+
+        .sidebar {
+            position: sticky;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #162447, #1b1f3b);
+            padding: 15px;
+        }
+
+        .sidebar a,
+        .sidebar button {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .btn-double-slide {
+            position: relative;
+            color: white;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 15px;
+        }
+
+        .btn-double-slide::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: white;
+            top: -150%;
+            left: -150%;
+            transition: all 0.7s ease;
+        }
+
+        .btn-double-slide:hover::before {
+            top: 0;
+            left: 0;
+        }
+
+        .btn-double-slide span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-double-slide.active {
+            background-color: rgba(225, 215, 215, 0.5);
+            color: black;
+            font-weight: bold;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .dropdown-label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .dropdown-label img {
+            margin-right: 10px;
+        }
+
+        .badge {
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            padding: 0;
+            list-style: none;
+            width: 250px;
+            border-radius: 5px;
+            max-height: 500px;
+            overflow-y: auto;
+            z-index: 1000;
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .dropdown-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .text {
+            flex-grow: 1;
+            color: #333;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            margin-left: 10px;
+            margin-right: 10px;
+            color: #888;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #dc3545, #b02a2a);
+        }
+
+        /* Card Styling */
+        .card-container {
+            max-width: 980px;
+            margin-top: 50px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .card-container-form {
+            max-width: 900px;
+        }
+
+        .card-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 2px solid #007bff;
+            border-radius: 0;
+            background-color: transparent;
+            box-shadow: none;
+            padding-left: 0;
+            transition: border-bottom 0.3s ease;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .btn-custom {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(to right, #0056b3, #003f87);
+            transform: scale(1.05);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(to right, #dc3545, #b02a2a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: linear-gradient(to right, #b02a2a, #8b1e1e);
+            transform: scale(1.05);
+        }
+
+        .btn-reset {
+            background: linear-gradient(to right, #6c757d, #5a6268);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(to right, #5a6268, #495057);
+            transform: scale(1.05);
+        }
+
+        .btn-reset:disabled {
+            background: #d3d3d3;
+            cursor: not-allowed;
+        }
+
+        .horizontal-form .form-group {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 1%;
+        }
+
+        .horizontal-form .form-group.category-field {
+            width: 15%;
+            margin-right: 5%;
+        }
+
+        .horizontal-form .form-group.input-field {
+            width: 12%;
+        }
+
+        .horizontal-form .button-group {
+            text-align: center;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .plan-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .table-container {
+            margin-top: 30px;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table th {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 12px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .table th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        .table th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        .table tr:last-child td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+
+        .table tr:last-child td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-icon {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        .btn-warning,
+        .btn-success,
+        .btn-secondary {
+            transition: transform 0.2s ease;
+        }
+
+        .btn-warning:hover,
+        .btn-success:hover,
+        .btn-secondary:hover {
+            transform: scale(1.1);
+        }
+
+        /* Loader Styling */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .title-spacing {
+            margin-bottom: 30px;
+        }
+
+        /* Toast Styling */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loader -->
+    <div class="loader-overlay" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="d-flex">
+        <div class="sidebar col-md-2">
+            <h3 class="text-center fw-bold text-light">Admin Panel</h3>
+            <hr>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/A-Home.html';">
+                <span><i class="bi bi-house-door"></i> Dashboard</span>
+            </button>
+            <button class="btn btn-double-slide active mt-2"
+                onclick="window.location.href='../Admin/Manage-Plans.html';">
+                <span><i class="bi bi-people"></i> Plans Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/User_Management.html';">
+                <span><i class="bi bi-person-lines-fill"></i> User Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Reports.html';">
+                <span><i class="bi bi-graph-up"></i> Analysis</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/ConfigureFAQs.html';">
+                <span><i class="bi bi-gear"></i> Configure FAQs</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Settings.html';">
+                <span><i class="bi bi-gear"></i> Settings</span>
+            </button>
+        </div>
+        <div class="col-md-10 p-3 d-flex flex-column align-items-center">
+            <nav class="navbar navbar-expand-lg bg-danger navbar-dark px-3 rounded w-100">
+                <h3 id="dashboard">Plan Management</h3>
+                <div class="ms-auto d-flex align-items-center">
+                    <!-- Messages Dropdown -->
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/chat-message.png" alt="Messages" />
+                            <span class="badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/user.png" alt="User Icon">
+                                <div class="text">New message from John Doe<br>
+                                    <p>Hello, I need help with my account settings.</p>
+                                </div>
+                                <div class="timestamp">10:30 AM</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Notifications Dropdown -->
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/appointment-reminders.png"
+                                alt="Notifications" />
+                            <span class="badge">2</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/calendar.png" alt="Calendar Icon">
+                                <div class="text">Event "Project Deadline" is today</div>
+                                <div class="timestamp">09:00 AM</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
+                            role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="35" height="35"
+                                src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/user--v1.png" alt="user"
+                                class="rounded-circle me-0">
+                            <span id="adminIdDisplay">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i
+                                        class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <hr class="w-100">
+            <!-- Add/Edit Plan Card -->
+            <div class="card-container card-container-form" id="formSection">
+                <h2 class="text-center title-spacing">Customize Recharge Plans</h2>
+                <form class="horizontal-form">
+                    <input type="hidden" id="editPlanId" value="-1">
+                    <div class="form-group category-field">
+                        <label for="planCategory">Category</label>
+                        <select id="planCategory" class="form-select">
+                            <option value="custom">Add New Category</option>
+                            <option value="validity_plans" selected>Validity Plans</option>
+                            <option value="data_plans">Data Plans</option>
+                            <option value="unlimited_data_plans">Unlimited Data Plans</option>
+                            <option value="talktime_plans">Talktime Plans</option>
+                            <option value="entertainment_plans">Entertainment Plans</option>
+                            <option value="annual_plans">Annual Plans</option>
+                            <option value="topup_plans">Topup Plans</option>
+                            <option value="Recommended">Recommended</option>
+                            <option value="Popular">Popular</option>
+                            <option value="Home-Recharge">Home-Recharge</option>
+                        </select>
+                        <input type="text" id="customCategory" class="form-control mt-2"
+                            placeholder="Enter new category" style="display: none;">
+                    </div>
+                    <div class="form-group input-field">
+                        <input type="text" class="form-control" id="planTitle" placeholder="Title">
+                    </div>
+                    <div class="form-group input-field">
+                        <input type="number" class="form-control" id="planPrice" placeholder="Price" step="0.01">
+                    </div>
+                    <div class="form-group input-field">
+                        <input type="text" class="form-control" id="planValidity" placeholder="Validity">
+                    </div>
+                    <div class="form-group input-field">
+                        <input type="text" class="form-control" id="planData" placeholder="Data">
+                    </div>
+                    <div class="form-group input-field">
+                        <input type="text" class="form-control" id="planImage" placeholder="Image URL">
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-custom" onclick="savePlan()">Save Plan</button>
+                        <button type="button" class="btn btn-reset" id="resetButton" onclick="resetForm()"
+                            disabled>Reset</button>
+                        <button type="button" class="btn btn-cancel" id="cancelButton" style="display: none;"
+                            onclick="cancelEdit()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Existing Plans Card -->
+            <div class="card-container table-container">
+                <h4 class="text-center title-spacing">Existing Plans</h4>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Plan ID</th>
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th>Validity</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plansTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        const backendUrl = 'http://localhost:8082';
+
+        // Loader Functions
+        function showLoader() {
+            document.getElementById('loader').style.display = 'flex';
+        }
+
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        // Toast Function
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastId = `toast-${Date.now()}`;
+            const toastHTML = `
+                <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            toastContainer.innerHTML += toastHTML;
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+            toast.show();
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+
+            const adminId = localStorage.getItem('adminId') || 'Admin';
+            document.getElementById('adminIdDisplay').textContent = adminId;
+
+            console.log("Token:", token);
+            console.log("Role:", role);
+            console.log("Admin ID:", adminId);
+
+            if (!token || role !== 'ROLE_ADMIN') {
+                console.log("No valid token or role, redirecting to login");
+                handleUnauthorized();
+                return;
+            }
+
+            console.log("Loading plans with token");
+            await loadPlans(token);
+            setupCategoryDropdown();
+            setupFormListeners();
+        });
+
+        async function loadPlans(token) {
+            showLoader();
+            try {
+                console.log("Fetching plans from:", `${backendUrl}/api/plans/`);
+                const response = await fetch(`${backendUrl}/api/plans/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log("Response status:", response.status);
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        console.log("Unauthorized or Forbidden access detected");
+                        handleUnauthorized();
+                        return;
+                    }
+                    const errorText = await response.text();
+                    throw new Error(errorText || 'Failed to fetch plans');
+                }
+
+                const plans = await response.json();
+                console.log("Fetched plans:", plans);
+                renderPlans(plans);
+            } catch (error) {
+                console.error("Error fetching plans:", error);
+                showToast("An error occurred while fetching plans: " + error.message, 'danger');
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function renderPlans(plans) {
+            const table = document.getElementById("plansTable");
+            table.innerHTML = "";
+            if (!plans || plans.length === 0) {
+                table.innerHTML = '<tr><td colspan="9" class="text-center">No plans available.</td></tr>';
+                return;
+            }
+            plans.forEach(plan => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${plan.id}</td>
+                        <td>${plan.image ? `<img src="${plan.image}" class="plan-image" alt="Plan Image">` : ''}</td>
+                        <td>${plan.category || 'N/A'}</td>
+                        <td>${plan.title}</td>
+                        <td>${plan.price}</td>
+                        <td>${plan.validity || 'N/A'}</td>
+                        <td>${plan.data || 'N/A'}</td>
+                        <td>${plan.isActive ? 'Active' : 'Inactive'}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-warning btn-icon" onclick="editPlan(${plan.id})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm ${plan.isActive ? 'btn-secondary' : 'btn-success'} btn-icon" onclick="togglePlanStatus(${plan.id})">
+                                    <i class="bi ${plan.isActive ? 'bi-slash-circle' : 'bi-check-circle'}"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function savePlan() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                handleUnauthorized();
+                return;
+            }
+            const editPlanId = document.getElementById("editPlanId").value;
+            const adminId = localStorage.getItem('adminId') || '1';
+            let category = document.getElementById("planCategory").value;
+            if (category === "custom") {
+                category = document.getElementById("customCategory").value.trim();
+                if (!category) {
+                    showToast("Please enter a custom category.", 'danger');
+                    return;
+                }
+            }
+            const plan = {
+                title: document.getElementById("planTitle").value.trim(),
+                price: parseFloat(document.getElementById("planPrice").value) || 0,
+                validity: document.getElementById("planValidity").value.trim(),
+                data: document.getElementById("planData").value.trim(),
+                image: document.getElementById("planImage").value.trim(),
+                category: category,
+                adminId: adminId
+            };
+            if (!plan.title || !plan.price || !plan.validity) {
+                showToast("Title, Price, and Validity are required fields.", 'danger');
+                return;
+            }
+            const method = editPlanId === "-1" ? 'POST' : 'PUT';
+            const url = editPlanId === "-1" ? `${backendUrl}/api/plans/add` : `${backendUrl}/api/plans/update/${editPlanId}`;
+            showLoader();
+            try {
+                console.log("Saving plan:", plan);
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(plan)
+                });
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) handleUnauthorized();
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `Failed to ${editPlanId === "-1" ? 'save' : 'update'} plan`);
+                }
+                showToast(`Plan ${editPlanId === "-1" ? 'added' : 'updated'} successfully!`, 'success');
+                cancelEdit();
+                await loadPlans(token);
+            } catch (error) {
+                console.error(`Error ${editPlanId === "-1" ? 'saving' : 'updating'} plan:`, error);
+                showToast(`Error: ${error.message}`, 'danger');
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function togglePlanStatus(id) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                handleUnauthorized();
+                return;
+            }
+            if (confirm(`Are you sure you want to toggle the status of this plan?`)) {
+                showLoader();
+                try {
+                    const response = await fetch(`${backendUrl}/api/admin/plans/toggle/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!response.ok) {
+                        if (response.status === 401 || response.status === 403) handleUnauthorized();
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to toggle plan status');
+                    }
+                    const result = await response.json();
+                    showToast(`Plan ${result.isActive ? 'enabled' : 'disabled'} successfully!`, 'success');
+                    await loadPlans(token);
+                } catch (error) {
+                    console.error("Error toggling plan status:", error);
+                    showToast(`Error: ${error.message}`, 'danger');
+                } finally {
+                    hideLoader();
+                }
+            }
+        }
+
+        async function editPlan(id) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                handleUnauthorized();
+                return;
+            }
+            showLoader();
+            try {
+                const response = await fetch(`${backendUrl}/api/plans/${id}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) handleUnauthorized();
+                    throw new Error('Failed to fetch plan details');
+                }
+                const plan = await response.json();
+                document.getElementById("planTitle").value = plan.title || '';
+                document.getElementById("planPrice").value = plan.price || '';
+                document.getElementById("planValidity").value = plan.validity || '';
+                document.getElementById("planData").value = plan.data || '';
+                document.getElementById("planImage").value = plan.image || '';
+                document.getElementById("planCategory").value = plan.category || 'validity_plans';
+                if (!document.getElementById("planCategory").value) {
+                    document.getElementById("planCategory").value = "custom";
+                    document.getElementById("customCategory").value = plan.category;
+                    document.getElementById("customCategory").style.display = "block";
+                }
+                document.getElementById("editPlanId").value = plan.id;
+                document.getElementById("cancelButton").style.display = "inline-block";
+                document.getElementById("resetButton").style.display = "none";
+                document.getElementById("formSection").scrollIntoView({ behavior: 'smooth' });
+                checkFormInputs();
+            } catch (error) {
+                console.error("Error fetching plan details:", error);
+                showToast("An error occurred while fetching plan details.", 'danger');
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function cancelEdit() {
+            clearForm();
+            document.getElementById("cancelButton").style.display = "none";
+            document.getElementById("resetButton").style.display = "inline-block";
+            checkFormInputs();
+        }
+
+        function clearForm() {
+            document.getElementById("planTitle").value = "";
+            document.getElementById("planPrice").value = "";
+            document.getElementById("planValidity").value = "";
+            document.getElementById("planData").value = "";
+            document.getElementById("planImage").value = "";
+            document.getElementById("planCategory").value = "validity_plans";
+            document.getElementById("customCategory").value = "";
+            document.getElementById("customCategory").style.display = "none";
+            document.getElementById("editPlanId").value = "-1";
+        }
+
+        function resetForm() {
+            clearForm();
+            checkFormInputs();
+            showToast("Form has been reset.", 'info');
+        }
+
+        function setupCategoryDropdown() {
+            const categorySelect = document.getElementById("planCategory");
+            const customInput = document.getElementById("customCategory");
+            categorySelect.addEventListener("change", () => {
+                customInput.style.display = categorySelect.value === "custom" ? "block" : "none";
+                checkFormInputs();
+            });
+        }
+
+        function setupFormListeners() {
+            const inputs = [
+                document.getElementById("planTitle"),
+                document.getElementById("planPrice"),
+                document.getElementById("planValidity"),
+                document.getElementById("planData"),
+                document.getElementById("planImage"),
+                document.getElementById("planCategory"),
+                document.getElementById("customCategory")
+            ];
+            inputs.forEach(input => {
+                input.addEventListener("input", checkFormInputs);
+                input.addEventListener("change", checkFormInputs);
+            });
+        }
+
+        function checkFormInputs() {
+            const planTitle = document.getElementById("planTitle").value.trim();
+            const planPrice = document.getElementById("planPrice").value.trim();
+            const planValidity = document.getElementById("planValidity").value.trim();
+            const planData = document.getElementById("planData").value.trim();
+            const planImage = document.getElementById("planImage").value.trim();
+            const planCategory = document.getElementById("planCategory").value;
+            const customCategory = document.getElementById("customCategory").value.trim();
+
+            const isFormFilled = planTitle || planPrice || planValidity || planData || planImage || customCategory || planCategory !== "validity_plans";
+            const resetButton = document.getElementById("resetButton");
+            resetButton.disabled = !isFormFilled;
+        }
+
+        function handleUnauthorized() {
+            console.log("Handling unauthorized access");
+            localStorage.clear();
+            showToast('Session expired or unauthorized access. Please log in again.', 'danger');
+            setTimeout(() => {
+                window.location.href = '../Admin/AdminLogin.html?logout=true';
+            }, 1500);
+        }
+
+        async function logout() {
+            const token = localStorage.getItem('token');
+            showLoader();
+            try {
+                console.log("Logging out with token:", token);
+                const response = await fetch(`${backendUrl}/api/admin/logout`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                console.log("Logout response status:", response.status);
+            } catch (error) {
+                console.error('Logout error:', error);
+            } finally {
+                hideLoader();
+            }
+            localStorage.clear();
+            showToast('Logged out successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = '../Admin/AdminLogin.html?logout=true';
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>

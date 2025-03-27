@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link href="../css/main.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+
+
+    <style>
+        body {
+            background-color: rgb(232, 227, 227);
+        }
+
+        .sidebar {
+            /* background-color: #87730E !important; */
+            position: sticky;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #162447, #1b1f3b);
+            padding: 15px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .neu-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 2px 2px 6px #bebebe, 2px 2px 6px #ffffff;
+            padding: 4px;
+            text-align: center;
+            transition: 0.3s;
+            max-height: 100%;
+        }
+
+        .neu-card h5 {
+            color: #555;
+        }
+
+        .neu-card h3 {
+            /* font-size: 32px; */
+            color: #333;
+        }
+
+        .neu-card:hover {
+            box-shadow: inset 4px 4px 8px #bebebe, inset 4px 4px 8px #ffffff;
+            transform: scale(1.05);
+        }
+
+        .dashboard-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+            position: relative;
+            transition: 0.3s ease-in-out;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card h5 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-card h3 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #222;
+            margin: 10px 0;
+        }
+
+        .dashboard-card span {
+            font-size: 14px;
+        }
+
+        .badge-custom {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-yearly {
+            background-color: #6f42c1;
+            color: #fff;
+        }
+
+        .badge-monthly {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        .badge-today {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .badge-annual {
+            background-color: #e83e8c;
+            color: #fff;
+        }
+
+        .increase {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .decrease {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: flex-end;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .equal-height {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 380px;
+        }
+
+
+        .chart-container {
+            flex-grow: 1;
+            min-height: 300px;
+            max-height: 400px;
+            width: 100%;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            height: 100%;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            max-height: 200px;
+            margin: 0 auto;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .left-align {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        /* For Transaction Management */
+        .card-header {
+            text-align: center;
+            color: black;
+        }
+
+        .fixed-height {
+            height: 600px;
+        }
+
+        .larger-height {
+            height: 480px;
+        }
+
+        .small-card {
+            height: 90px;
+        }
+
+        .btn-custom {
+            background-color: #4e73df;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #23086b;
+            color: white;
+        }
+
+        .status-successful {
+            color: green !important;
+        }
+
+        .status-pending {
+            color: orange !important;
+        }
+
+        .status-failed {
+            color: red !important;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .scrollable-table {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* For filtering the Expiring plans */
+        .container {
+            max-width: 95%;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(45deg, #b0cff0, #4a545d) !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px;
+        }
+
+        tbody tr {
+            background-color: white;
+            text-align: center;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        td:nth-child(1) {
+            font-weight: bold;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 10px;
+        }
+
+        #subscribersTable th,
+        #subscribersTable td {
+            font-size: 14px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #subscribersTableContainer {
+            margin-top: 25px !important;
+        }
+
+        /* Search box */
+        .dataTables_filter input {
+            border: 1px solid #6ba6f8 !important;
+            border-radius: 20px !important;
+            padding: 6px 12px;
+            outline: none;
+            width: 140px;
+            background-size: 16px;
+            margin-left: 10px !important;
+            margin-right: 20px;
+        }
+
+        .dataTables_filter label {
+            color: #333;
+            /* margin-right: 200px !important; */
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .chart-container {
+            width: 100%;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            text-align: center;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            text-align: left;
+        }
+
+        /* For alerting the users*/
+        .user-card {
+            background: #f8d7da;
+            padding: 12px;
+            margin: 2px 0;
+            border-radius: 8px;
+            border-left: 5px solid #d9534f;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .user-card p {
+            margin: 2px 0;
+            color: #721c24;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3px;
+        }
+
+        .notify-btn {
+            background: #d9534f;
+        }
+
+        .view-more-btn {
+            background: #23086b;
+        }
+
+        .notify-btn,
+        .view-more-btn {
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .view-more-btn:hover {
+            background-color: #0a38ab;
+        }
+
+        .notify-btn:hover {
+            background: #c9302c;
+        }
+
+        .notify-all {
+            /* background: linear-gradient(90deg, #ff416c, #ff4b2b); */
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .notify-all:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ed5276);
+            box-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
+        }
+
+        .notify-all:active {
+            transform: scale(0.95);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 15px;
+            width: 45%;
+            max-height: 75vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-user {
+            background: #f8d7da;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #d9534f;
+            font-size: 12px;
+            line-height: 1.2;
+        }
+
+        .placeholder-card h4,
+        .placeholder-card p {
+            margin: 0px !important;
+            padding: 0 !important;
+            line-height: 1.1 !important;
+        }
+
+        .placeholder-card button {
+            margin-top: 3px !important;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #d9534f;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Widget Styles */
+        .widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .widget.open {
+            width: 190px;
+            height: 190px;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .widget-icon {
+            font-size: 24px;
+        }
+
+        .widget-content {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .widget.open .widget-content {
+            display: flex;
+        }
+
+        .widget.open .widget-icon {
+            display: none;
+        }
+
+
+        .close-btn {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        textarea {
+            font-size: 12px;
+            width: 100%;
+            height: 70px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .add-note-btn {
+            background-color: #411bc0;
+            color: white;
+            padding: 0px;
+            margin-bottom: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .add-note-btn:hover {
+            background-color: #311390;
+        }
+
+        .StickyNotes {
+            width: 40%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .notes-card h5 {
+            margin-bottom: 10px;
+        }
+
+        #allNotesList {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column-reverse;
+            flex-wrap: wrap-reverse;
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        #allNotesList::-webkit-scrollbar {
+            width: 2px;
+            height: 5px;
+        }
+
+        #allNotesList::-webkit-scrollbar-thumb {
+            background-color: #9f9f9f;
+        }
+
+
+        .note {
+            background-color: #7a6b6c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            font-size: 16px;
+        }
+
+        .edit-btn,
+        .delete-btn,
+        .drag-handle {
+            background: none;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+
+        .drag-handle {
+            cursor: grab;
+            font-size: 18px;
+            /* line-height: 1; */
+        }
+
+        .btn-double-slide {
+            position: relative;
+            color: white;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            padding: 10px 10px;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-double-slide::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: white;
+            color: #19064d;
+            top: -150%;
+            left: -150%;
+            transition: all 0.7s ease;
+        }
+
+        .btn-double-slide:hover::before {
+            top: 0;
+            left: 0;
+        }
+
+        .btn-double-slide span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-double-slide.active {
+            background-color: rgba(225, 215, 215, 0.5);
+            color: black;
+            font-weight: bold;
+        }
+
+        .btn-slide:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-bounce:hover {
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #closeIcon {
+            margin-top: 10px !important;
+        }
+
+        #closeIcon:hover {
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .dropdown-label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .dropdown-label img {
+            margin-right: 10px;
+        }
+
+        .badge {
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            padding: 0;
+            list-style: none;
+            width: 250px;
+            border-radius: 5px;
+            height: 200px;
+            max-height: 500px;
+            overflow-y: auto;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10%);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-size: 12px;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+        }
+
+        .dropdown input[type="checkbox"] {
+            display: none;
+        }
+
+        .dropdown input[type="checkbox"]:checked+.dropdown-label+.dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .dropdown-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .text {
+            flex-grow: 1;
+            color: #333;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            margin-left: 10px;
+            margin-right: 10px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-flex">
+        <div class="sidebar col-md-2">
+            <h3 class="text-center fw-bold text-light mt-4">Admin Panel</h3>
+            <hr class="text-light">
+            <button class="btn btn-double-slide active mt-2" onclick="window.location.href='../Admin/A-Home.html';">
+                <span><i class="bi bi-house-door"></i> Dashboard</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Manage-Users.html';">
+                <span><i class="bi bi-people"></i> Plans Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/User_Management.html';">
+                <span><i class="bi bi-person-lines-fill"></i> User Management</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Reports.html';">
+                <span><i class="bi bi-graph-up"></i> Analysis</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/ConfigureFAQs.html';">
+                <span><i class="bi bi-gear"></i> Configure FAQs</span>
+            </button>
+            <button class="btn btn-double-slide mt-2" onclick="window.location.href='../Admin/Settings.html';">
+                <span><i class="bi bi-gear"></i> Settings</span>
+            </button>
+        </div>
+
+        <div class="col-md-10 p-3 d-flex flex-column align-items-center">
+            <nav class="navbar navbar-expand-lg bg-danger navbar-dark px-3 rounded w-100">
+                <h3 id="dashboard">Dashboard</h3>
+                <div class="ms-auto d-flex align-items-center">
+                    <!-- Messages Dropdown -->
+                    <div class="dropdown">
+                        <input type="checkbox" id="messagesToggle">
+                        <label for="messagesToggle" class="dropdown-label me-2">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/chat-message.png" alt="Messages" />
+                            <span class="badge">3</span>
+                        </label>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/user.png" alt="User Icon">
+                                <div class="text">New message from John Doe<br>
+                                    <p>Hello, I need help with my account settings...</p>
+                                </div>
+                                <div class="timestamp">10:30 AM</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Notifications Dropdown -->
+                    <div class="dropdown">
+                        <input type="checkbox" id="notificationsToggle">
+                        <label for="notificationsToggle" class="dropdown-label me-4">
+                            <img width="25" height="25"
+                                src="https://img.icons8.com/ios-filled/50/FFFFFF/appointment-reminders.png"
+                                alt="Notifications" />
+                            <span class="badge">2</span>
+                        </label>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <img src="https://img.icons8.com/color/48/000000/calendar.png" alt="Calendar Icon">
+                                <div class="text">Event "Project Deadline" is today</div>
+                                <div class="timestamp">09:00 AM</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
+                            role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="35" height="35"
+                                src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/user--v1.png" alt="user"
+                                class="rounded-circle me-0">
+                            <span id="adminIdDisplay">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i
+                                        class="bi bi-box-arrow-right"></i>
+                                    Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <hr class="w-100">
+
+            <div class="container-fluid mt-2">
+                <div class="row gx-2 gy-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="dashboard-card position-relative p-3 h-100">
+                            <span class="badge bg-primary position-absolute top-0 end-0 m-2 small">Yearly</span>
+                            <h5>Total Users</h5>
+                            <hr>
+                            <h3 class="text-center">1.2 Lakh</h3>
+                            <span class="text-success position-absolute bottom-0 end-0 m-2 small">↑ 45%</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="dashboard-card position-relative p-3 h-100">
+                            <span class="badge bg-success position-absolute top-0 end-0 m-2 small">Today</span>
+                            <h5>New Visits</h5>
+                            <hr>
+                            <h3 class="text-center">55,000</h3>
+                            <span class="text-danger position-absolute bottom-0 end-0 m-2 small">↓ 12%</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="dashboard-card position-relative p-3 h-100">
+                            <span class="badge bg-warning position-absolute top-0 end-0 m-2 small">Monthly</span>
+                            <h5>Revenue</h5>
+                            <hr>
+                            <h3 class="text-center">₹15.2 Lakh</h3>
+                            <span class="text-success position-absolute bottom-0 end-0 m-2 small">↑ 69%</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="dashboard-card position-relative p-3 h-100">
+                            <h5>Total Plans</h5>
+                            <hr>
+                            <h3 class="text-center">75+</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex flex-column">
+                        <div class="card mb-2" style="height: 225px; position: relative;">
+                            <div id="expiring-plans-container" style="width: auto;">
+                                <h6 style="display: flex; justify-content: space-between; align-items: center;">
+                                    🔔 Expiring Plans within 3 days
+                                    <button id="notify-all-btn" class="notify-all">Notify All</button>
+                                </h6>
+                                <div id="expiring-plans"></div>
+                            </div>
+                            <div id="expiring-modal" class="modal">
+                                <div class="modal-content">
+                                    <span id="close-modal" class="close">×</span>
+                                    <h4>📢 Users with Expiring Plans</h4>
+                                    <div id="modal-body"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="height: 295px; cursor: pointer;"
+                            onclick="window.location.href='popularityRecharge.html'">
+                            <h5 class="text-center">Monthly Popularity of Recharge Plans</h5>
+                            <canvas class="mb-3" id="rechargePlansChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-stretch">
+                        <div class="card w-100 d-flex flex-column shadow lg" style="height: 530px;">
+                            <h5 class="text-center mt-3">Subscribers with Expiring Prepaid Plans</h5>
+                            <div class="table-responsive" id="subscribersTableContainer">
+                                <table id="subscribersTable" class="table table-sm w-auto">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Plan</th>
+                                            <th>Expiration</th>
+                                            <th>Days Left</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <div class="container">
+                <h4 class="text-center">User & Subscription Management</h4>
+                <div class="row d-flex justify-content-between align-items-start mt-4 g-0 gap-2">
+                    <div class="col-md-6 card p-3 d-flex flex-column align-items-center flex-grow-1 equal-height">
+                        <h5 class="text-center mb-3">User Growth Insights: <span style="color: green;">Scaling New
+                                Heights</span></h5>
+                        <div class="chart-container w-100">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-5 card p-3 d-flex flex-column flex-grow-1 equal-height justify-content-center">
+                        <h5 class="text-center mb-5">User & Plan Subscription Breakdown</h5>
+                        <div class="row w-100 chart-row">
+                            <div class="col-md-6 text-center">
+                                <h6><b>Users</b></h6>
+                                <div class="chart-wrapper">
+                                    <canvas id="userChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <h6><b>Plans</b></h6>
+                                <div class="chart-wrapper">
+                                    <canvas id="planChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="container">
+                <h4 class="text-center mb-4">Recharge & Transactions Management</h4>
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="card fixed-height">
+                            <div class="card-header">
+                                <h5 class="mb-0">Transaction List</h5>
+                            </div>
+                            <div class="card-body scrollable-table">
+                                <h6>March 2025</h6>
+                                <table class="table table-striped" id="march-transactions">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Plan ID</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="march-list"></tbody>
+                                </table>
+                                <h6>February 2025</h6>
+                                <table class="table table-striped" id="february-transactions">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Plan ID</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="february-list"></tbody>
+                                </table>
+                                <h6>January 2025</h6>
+                                <table class="table table-striped" id="january-transactions">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Plan ID</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="january-list"></tbody>
+                                </table>
+                                <h6>December 2024</h6>
+                                <table class="table table-striped" id="december-transactions">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Plan ID</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="december-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="card larger-height">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Search & Filter Transactions</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="search-form">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="search-user-id"
+                                                        placeholder="User ID">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="search-plan-id"
+                                                        placeholder="Plan ID">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <input type="date" class="form-control" id="search-date"
+                                                    placeholder="Date">
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <select class="form-control" id="search-month">
+                                                    <option value="">All Months</option>
+                                                    <option value="0">January</option>
+                                                    <option value="1">February</option>
+                                                    <option value="11">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <input type="number" class="form-control" id="search-amount"
+                                                    placeholder="Amount">
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <select class="form-control" id="search-status">
+                                                    <option value="">Status</option>
+                                                    <option value="Successful">Successful</option>
+                                                    <option value="Failed">Failed</option>
+                                                    <option value="Pending">Pending</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <select class="form-control" id="search-amount-type">
+                                                    <option value="">Amount Type</option>
+                                                    <option value="less">Less than</option>
+                                                    <option value="greater">Greater than</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-custom mt-3">Search</button>
+                                            <button type="reset" class="btn btn-secondary btn-slide mt-3">Reset</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card small-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="my-0">Transaction Status</h6>
+                                        <button type="button" class="view-more-btn btn-bounce text-light"
+                                            onclick="window.location.href='../Admin/TransactionView.html'">View
+                                            Graph</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticky Notes Widget -->
+            <div class="widget" onclick="toggleWidget(event)">
+                <span class="widget-icon">📝</span>
+                <div class="widget-content" onclick="event.stopPropagation()">
+                    <div style="display: flex; justify-content: flex-end;">
+                        <img id="closeIcon" width="25" height="25" src="https://img.icons8.com/ios-filled/50/cancel.png"
+                            alt="cancel" onclick="closeWidget(event)"
+                            style="cursor: pointer; transition: transform 0.3s ease, opacity 0.3s ease;">
+                    </div>
+                    <h6>MemoBits</h6>
+                    <textarea id="noteText" placeholder="Enter your note..."></textarea>
+                    <button class="add-note-btn" onclick="addNote(event)">Add</button>
+                </div>
+            </div>
+            <div class="container StickyNotes">
+                <div class="notes-card">
+                    <h5 class="text-center">MemoVault</h5>
+                    <hr>
+                    <ul id="allNotesList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const BASE_URL = 'http://localhost:8082';
+
+        // Check authentication on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem('token');
+            const adminId = localStorage.getItem('adminId');
+            const role = localStorage.getItem('role');
+
+            if (!token || !adminId || role !== 'ROLE_ADMIN') {
+                window.location.href = '../FrontEnd/AdminLogin.html';
+                return;
+            }
+
+            document.getElementById('adminIdDisplay').textContent = adminId;
+
+            document.getElementById('logoutBtn').addEventListener('click', function (e) {
+                e.preventDefault();
+                logout();
+            });
+
+            initializeCharts();
+        });
+
+        // Centralized error handler with token expiration check
+        const handleApiError = async (response) => {
+            if (!response.ok) {
+                const errorData = await response.json();
+                const { message, errorCode } = errorData;
+
+                if (response.status === 401 || response.status === 403) {
+                    alert('Session expired or unauthorized access. Please login again.');
+                    logout();
+                    return;
+                }
+
+                const errorMessages = {
+                    NO_RECHARGE_HISTORY: 'No recharge history available.',
+                    NO_EXPIRING_PLANS: 'No plans are expiring within the next 3 days.',
+                    NO_USERS_FOUND: 'No user data available.',
+                    NO_PLANS_FOUND: 'No plan data available.',
+                    UNEXPECTED_ERROR: 'An unexpected error occurred. Please try again later.',
+                };
+
+                const userMessage = errorMessages[errorCode] || message || `An unexpected error occurred (Status: ${response.status}).`;
+                throw new Error(userMessage);
+            }
+            return response.json();
+        };
+
+        // API fetch with Authorization header
+        const fetchWithAuth = async (url, options = {}) => {
+            const token = localStorage.getItem('token');
+            return fetch(url, {
+                ...options,
+                headers: {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+        };
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('adminId');
+            localStorage.removeItem('adminEmail');
+            localStorage.removeItem('role');
+            window.location.href = '../FrontEnd/AdminLogin.html';
+        }
+
+        function initializeCharts() {
+            // 1. Monthly Popularity of Recharge Plans
+            fetchWithAuth(`${BASE_URL}/api/plans/popularity`)
+                .then(response => handleApiError(response))
+                .then(popularity => {
+                    const categories = Object.keys(popularity);
+                    const counts = Object.values(popularity);
+
+                    new Chart(document.getElementById('rechargePlansChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: categories.length > 0 ? categories : ['No Data'],
+                            datasets: [{
+                                label: 'Number of Recharges',
+                                data: counts.length > 0 ? counts : [0],
+                                backgroundColor: [
+                                    'rgba(135, 206, 250, 0.9)', 'rgba(220, 220, 220, 0.9)', 'rgba(100, 149, 237, 0.9)',
+                                    'rgba(255, 127, 80, 0.9)', 'rgba(186, 85, 211, 0.9)', 'rgba(255, 165, 0, 0.9)',
+                                    'rgba(255, 215, 0, 0.9)'
+                                ],
+                                borderColor: [
+                                    'rgba(135, 206, 250, 1)', 'rgba(220, 220, 220, 1)', 'rgba(100, 149, 237, 1)',
+                                    'rgba(255, 127, 80, 1)', 'rgba(186, 85, 211, 1)', 'rgba(255, 165, 0, 1)',
+                                    'rgba(255, 215, 0, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { beginAtZero: true, title: { display: true, text: 'Number of Recharges' } },
+                                x: { title: { display: true, text: 'Plan Categories' } }
+                            },
+                            plugins: {
+                                legend: { display: true, position: 'top' },
+                                tooltip: { enabled: true }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching popularity:", error);
+                    document.getElementById('rechargePlansChart').parentElement.innerHTML = `
+                            <p style="color: red; text-align: center;">${error.message}</p>
+                        `;
+                });
+
+            // 2. User Growth Insights
+            fetchWithAuth(`${BASE_URL}/api/users/growth`)
+                .then(response => handleApiError(response))
+                .then(growthData => {
+                    const months = Object.keys(growthData);
+                    const userCounts = Object.values(growthData);
+
+                    new Chart(document.getElementById('userGrowthChart'), {
+                        type: 'line',
+                        data: {
+                            labels: months.length > 0 ? months : ['No Data'],
+                            datasets: [{
+                                label: 'User Growth',
+                                data: userCounts.length > 0 ? userCounts : [0],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { beginAtZero: true, title: { display: true, text: 'Number of Users' } },
+                                x: { title: { display: true, text: 'Months' } }
+                            },
+                            plugins: {
+                                legend: { display: true, position: 'top' },
+                                tooltip: { enabled: true }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching user growth:", error);
+                    document.getElementById('userGrowthChart').parentElement.innerHTML = `
+                            <p style="color: red; text-align: center;">${error.message}</p>
+                        `;
+                });
+
+            // 3. User Breakdown
+            fetchWithAuth(`${BASE_URL}/api/users/breakdown`)
+                .then(response => handleApiError(response))
+                .then(breakdown => {
+                    new Chart(document.getElementById('userChart'), {
+                        type: 'pie',
+                        data: {
+                            labels: ['Active Users', 'Inactive Users'],
+                            datasets: [{
+                                data: [breakdown.active || 0, breakdown.inactive || 0],
+                                backgroundColor: ['#66CDAA', '#FF4500'],
+                                hoverOffset: 20
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { tooltip: { enabled: true } },
+                            animation: { animateScale: true }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching user breakdown:", error);
+                    document.getElementById('userChart').parentElement.innerHTML = `
+            <p style="color: red; text-align: center;">${error.message}</p>
+        `;
+                });
+
+            // 4. Plan Subscription Breakdown
+            fetchWithAuth(`${BASE_URL}/api/plans/breakdown`)
+                .then(response => handleApiError(response))
+                .then(breakdown => {
+                    new Chart(document.getElementById('planChart'), {
+                        type: 'pie',
+                        data: {
+                            labels: ['Popular Plans', 'Recommended Plans', 'Normal Plans'],
+                            datasets: [{
+                                data: [
+                                    breakdown.popular || 0,
+                                    breakdown.recommended || 0,
+                                    breakdown.normal || 0
+                                ],
+                                backgroundColor: ['#87CEEB', '#FFB6C1', '#98FB98'],
+                                hoverOffset: 20
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { tooltip: { enabled: true } },
+                            animation: { animateScale: true }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching plan breakdown:", error);
+                    document.getElementById('planChart').parentElement.innerHTML = `
+            <p style="color: red; text-align: center;">${error.message}</p>
+        `;
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const expiringContainer = document.getElementById("expiring-plans");
+            const modalBody = document.getElementById("modal-body");
+            const modal = document.getElementById("expiring-modal");
+            const closeModal = document.getElementById("close-modal");
+            const notifyAllBtn = document.getElementById("notify-all-btn");
+            const tbody = document.querySelector("#subscribersTable tbody");
+
+            let expiringData = [];
+
+            fetchWithAuth(`${BASE_URL}/api/recharge/expiring`)
+                .then(response => handleApiError(response))
+                .then(data => {
+                    expiringData = data;
+                    if (!data || data.length === 0) {
+                        expiringContainer.innerHTML = `<p>No plans expiring within 3 days.</p>`;
+                        tbody.innerHTML = `<tr><td colspan="4">No expiring plans found.</td></tr>`;
+                        return;
+                    }
+
+                    const firstRecharge = data[0];
+                    const firstExpDate = new Date(firstRecharge.expirationDate);
+                    const today = new Date();
+                    const firstDiffDays = Math.ceil((firstExpDate - today) / (1000 * 60 * 60 * 24));
+                    expiringContainer.innerHTML = `
+                <div class="user-card">
+                    <p><strong>${firstRecharge.userName}</strong> (ID: ${firstRecharge.userId})</p>
+                    <p class="expires-text">Expires in: <strong>${firstDiffDays} days</strong></p>
+                    <div class="btn-container">
+                        <button class="notify-btn" onclick="sendNotification('${firstRecharge.mobileNumber}', '${firstRecharge.userId}')">Send Notification</button>
+                        <button class="view-more-btn" onclick="openModal()">View More</button>
+                    </div>
+                </div>
+            `;
+
+                    modalBody.innerHTML = data.map(recharge => {
+                        const expDate = new Date(recharge.expirationDate);
+                        const diffDays = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+                        return `
+                    <div class="modal-user">
+                        <p><strong>${recharge.mobileNumber}</strong> (ID: ${recharge.userId})</p>
+                        <p>Expires in: <strong>${diffDays} days</strong></p>
+                        <button class="notify-btn" onclick="sendNotification('${recharge.mobileNumber}', '${recharge.userId}')">Send Notification</button>
+                    </div>
+                `;
+                    }).join("");
+
+                    tbody.innerHTML = data.map(recharge => {
+                        const expDate = new Date(recharge.expirationDate);
+                        const diffDays = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+                        const color = diffDays <= 1 ? 'red' : diffDays <= 3 ? 'orange' : 'green';
+                        return `
+                    <tr>
+                        <td>${recharge.userName}</td>
+                        <td>${recharge.planTitle}</td>
+                        <td>${expDate.toISOString().split('T')[0]}</td>
+                        <td style="color: ${color}">${diffDays} days</td>
+                    </tr>
+                `;
+                    }).join("");
+
+                    if (!$.fn.DataTable.isDataTable('#subscribersTable')) {
+                        $('#subscribersTable').DataTable({
+                            paging: true,
+                            searching: true,
+                            info: true,
+                            ordering: false,
+                            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]],
+                            language: {
+                                search: "🔍 Search:",
+                                lengthMenu: "Show _MENU_",
+                                info: "_TOTAL_ Records",
+                                paginate: { first: "", last: "", next: "Next →", previous: "← Back" }
+                            },
+                            pagingType: "simple"
+                        });
+                    }
+
+                    notifyAllBtn.addEventListener("click", function () {
+                        const mobileNumbers = expiringData.map(recharge => recharge.mobileNumber);
+                        fetchWithAuth(`${BASE_URL}/api/support/notify-all`, {
+                            method: 'POST',
+                            body: JSON.stringify(mobileNumbers)
+                        })
+                            .then(response => handleApiError(response))
+                            .then(() => {
+                                let message = "📢 Notifications sent to users:\n\n";
+                                expiringData.forEach(recharge => {
+                                    const expDate = new Date(recharge.expirationDate);
+                                    const diffDays = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+                                    message += `🔹 ${recharge.mobileNumber} - Expires in ${diffDays} days\n`;
+                                });
+                                message += "\n💡 Recharge now on MOBI-COMM!";
+                                alert(message);
+                            })
+                            .catch(error => {
+                                console.error('Error sending bulk notifications:', error);
+                                alert(`Failed to send bulk notifications: ${error.message}`);
+                            });
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching expiring plans:", error);
+                    expiringContainer.innerHTML = `<p style="color: red;">${error.message}</p>`;
+                    tbody.innerHTML = `<tr><td colspan="4" style="color: red;">${error.message}</td></tr>`;
+                });
+
+            window.openModal = function () { modal.style.display = "flex"; };
+            closeModal.onclick = function () { modal.style.display = "none"; };
+            window.sendNotification = function (mobile, userId) {
+                fetchWithAuth(`${BASE_URL}/api/support/notify`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        mobileNumber: mobile,
+                        userId: userId,
+                        message: 'Your plan is about to expire. Recharge now on MOBI-COMM!'
+                    })
+                })
+                    .then(response => handleApiError(response))
+                    .then(() => {
+                        alert(`Notification sent to ${mobile}!`);
+                    })
+                    .catch(error => {
+                        console.error('Error sending notification:', error);
+                        alert(`Failed to send notification: ${error.message}`);
+                    });
+            };
+        });
+
+        // Transaction Management
+        $(document).ready(function () {
+            function filterTransactions(transactions, filters) {
+                console.log("Filtering transactions with:", filters);
+                return transactions.filter(function (transaction) {
+                    const timestampDate = new Date(transaction.timestamp);
+                    return (!filters.userId || transaction.userId.toString().includes(filters.userId)) &&
+                        (!filters.planId || transaction.planId.toString().includes(filters.planId)) &&
+                        (!filters.status || transaction.status === filters.status) &&
+                        (!filters.date || timestampDate.toISOString().split('T')[0] === filters.date) &&
+                        (!filters.month || timestampDate.getMonth() === parseInt(filters.month)) &&
+                        (!filters.amount || (filters.amountType === "less" ? transaction.price < filters.amount : transaction.price > filters.amount));
+                });
+            }
+
+            function populateTransactions(transactions, elementId) {
+                console.log(`Populating ${elementId} with ${transactions.length} transactions`);
+                let list = $(`#${elementId}`);
+                list.empty();
+                if (transactions.length === 0) {
+                    list.append(`<tr><td colspan="5">No transactions for this month</td></tr>`);
+                } else {
+                    transactions.forEach(function (transaction) {
+                        const date = new Date(transaction.timestamp).toISOString().split('T')[0];
+                        list.append(`
+                                <tr>
+                                    <td>${transaction.userId}</td>
+                                    <td>${transaction.planId}</td>
+                                    <td>${date}</td>
+                                    <td>${transaction.price}</td>
+                                    <td class="${transaction.status === 'Successful' ? 'status-successful' : (transaction.status === 'Failed' ? 'status-failed' : 'status-pending')}">${transaction.status}</td>
+                                </tr>
+                            `);
+                    });
+                }
+            }
+
+            fetchWithAuth(`${BASE_URL}/api/recharge/admin/history`)
+                .then(response => handleApiError(response))
+                .then(transactions => {
+                    console.log("Raw Transactions Data:", transactions);
+                    if (!Array.isArray(transactions)) {
+                        throw new Error("Expected an array of transactions, got: " + JSON.stringify(transactions));
+                    }
+
+                    let monthLists = {
+                        "0": $('#january-list'),
+                        "1": $('#february-list'),
+                        "2": $('#march-list'),
+                        "11": $('#december-list')
+                    };
+
+                    Object.keys(monthLists).forEach(function (month) {
+                        let monthTransactions = transactions.filter(transaction => {
+                            const monthNum = new Date(transaction.timestamp).getMonth();
+                            return monthNum === parseInt(month);
+                        });
+                        console.log(`Month ${month} has ${monthTransactions.length} transactions`);
+                        populateTransactions(monthTransactions, monthLists[month].attr('id'));
+                    });
+
+                    $('#search-form').submit(function (event) {
+                        event.preventDefault();
+                        let filters = {
+                            userId: $('#search-user-id').val(),
+                            planId: $('#search-plan-id').val(),
+                            status: $('#search-status').val(),
+                            date: $('#search-date').val(),
+                            amount: $('#search-amount').val() ? parseFloat($('#search-amount').val()) : null,
+                            amountType: $('#search-amount-type').val(),
+                            month: $('#search-month').val()
+                        };
+                        let filteredTransactions = filterTransactions(transactions, filters);
+                        console.log("Filtered Transactions:", filteredTransactions);
+                        Object.keys(monthLists).forEach(function (month) {
+                            let filteredMonthTransactions = filteredTransactions.filter(transaction => new Date(transaction.timestamp).getMonth() === parseInt(month));
+                            populateTransactions(filteredMonthTransactions, monthLists[month].attr('id'));
+                        });
+                    });
+
+                    $('#search-form').on('reset', function () {
+                        console.log("Resetting tables");
+                        Object.keys(monthLists).forEach(function (month) {
+                            let monthTransactions = transactions.filter(transaction => new Date(transaction.timestamp).getMonth() === parseInt(month));
+                            populateTransactions(monthTransactions, monthLists[month].attr('id'));
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching transactions:", error);
+                    let monthLists = {
+                        "0": $('#january-list'),
+                        "1": $('#february-list'),
+                        "2": $('#march-list'),
+                        "11": $('#december-list')
+                    };
+                    Object.keys(monthLists).forEach(function (month) {
+                        monthLists[month].html(`<tr><td colspan="5" style="color: red;">${error.message}</td></tr>`);
+                    });
+                });
+        });
+
+        // Sticky Notes
+        document.addEventListener("DOMContentLoaded", () => {
+            displayAllNotes();
+            enableDragAndDrop();
+        });
+
+        function toggleWidget(event) {
+            event.stopPropagation();
+            const widget = document.querySelector(".widget");
+            widget.classList.toggle("open");
+        }
+
+        function closeWidget(event) {
+            event.stopPropagation();
+            const widget = document.querySelector(".widget");
+            widget.classList.remove("open");
+        }
+
+        function displayAllNotes() {
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+            const allNotesList = document.getElementById("allNotesList");
+            allNotesList.innerHTML = "";
+            notes.forEach((note, index) => {
+                const li = document.createElement("li");
+                li.classList.add("note");
+                li.setAttribute("data-index", index);
+                li.innerHTML = `
+                        <span class="drag-handle">☰</span>
+                        <span contenteditable="true" onblur="editNote(${index}, this.textContent)">${note}</span>
+                        <img id="closeIcon" width="20" height="20" src="https://img.icons8.com/windows/32/FFFFFF/cancel.png" 
+                            alt="cancel" onclick="deleteNote(${index})" style="cursor: pointer; transition: transform 0.3s ease, opacity 0.3s ease;">
+                    `;
+                allNotesList.appendChild(li);
+            });
+            enableDragAndDrop();
+        }
+
+        function addNote(event) {
+            event.stopPropagation();
+            const noteText = document.getElementById("noteText").value.trim();
+            if (!noteText) return;
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+            notes.push(noteText);
+            localStorage.setItem("notes", JSON.stringify(notes));
+            document.getElementById("noteText").value = "";
+            displayAllNotes();
+        }
+
+        function deleteNote(index) {
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+            notes.splice(index, 1);
+            localStorage.setItem("notes", JSON.stringify(notes));
+            displayAllNotes();
+        }
+
+        function editNote(index, newText) {
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+            notes[index] = newText;
+            localStorage.setItem("notes", JSON.stringify(notes));
+            displayAllNotes();
+        }
+
+        function enableDragAndDrop() {
+            const notesList = document.getElementById('allNotesList');
+            if (notesList && typeof Sortable !== 'undefined') {
+                Sortable.create(notesList, {
+                    animation: 150,
+                    onEnd: function (evt) {
+                        console.log('Note moved from', evt.oldIndex, 'to', evt.newIndex);
+                    }
+                });
+            } else {
+                console.error('Sortable not loaded or allNotesList element not found');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Mobi-Comm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400" rel="stylesheet">
+    <style>
+        body {
+            background-color: rgb(236, 236, 236);
+            overflow-x: hidden;
+            margin-top: 10%;
+        }
+
+        .navbar,
+        footer {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            transition: all 0.9s ease-in-out;
+        }
+
+        .navbar-brand,
+        .nav-link,
+        footer p {
+            color: white;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(10, 9, 9, 0.1);
+            animation: fadeIn 2s;
+        }
+
+        .login-left {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-left i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .login-left h3 {
+            font-size: 21px;
+            margin-bottom: 20px;
+        }
+
+        .login-left p {
+            font-size: 15px;
+            color: rgb(209, 205, 205);
+        }
+
+        .login-right {
+            padding: 40px;
+            background: #fff;
+            color: #333;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-create {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .btn-create:hover {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            animation: slideIn 0.3s forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-30px);
+            }
+
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-left,
+            .login-right {
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5" href="#">MOBI-COMM</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Admin Login Section -->
+    <main style="margin-bottom: 10%;">
+        <div class="login-container container">
+            <div class="login-card row">
+                <div class="login-left col-md-6 text-light">
+                    <i class="fas fa-shield-alt animate__animated animate__bounce" style="color: white;"></i>
+                    <h3>Admin Access</h3>
+                    <p>Log in to manage Mobi-Comm services securely.</p>
+                </div>
+                <div class="login-right col-md-6">
+                    <h3 class="text-center mb-4">Admin Login</h3>
+                    <form onsubmit="validateAdminForm(event)">
+                        <div class="form-group">
+                            <label for="adminId">Admin ID</label>
+                            <input type="text" class="form-control" id="adminId" placeholder="Enter your admin ID">
+                            <div id="adminIdError" class="text-danger mt-2" style="display: none;">Invalid admin ID.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminEmail">Admin Email</label>
+                            <input type="email" class="form-control" id="adminEmail"
+                                placeholder="Enter your admin email">
+                            <div id="adminEmailError" class="text-danger mt-2" style="display: none;">Invalid admin
+                                email.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminPassword">Password</label>
+                            <input type="password" class="form-control" id="adminPassword"
+                                placeholder="Enter your password">
+                            <div id="adminPasswordError" class="text-danger mt-2" style="display: none;">Invalid admin
+                                password.</div>
+                        </div>
+                        <button type="submit" class="btn btn-create btn-block">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container-fluid">
+        <div class="text-center">
+            <p class="p-4 text-light">© 2025 Mobile Prepaid Recharge. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        const backendUrl = 'http://localhost:8082';
+
+        async function validateAdminForm(event) {
+            event.preventDefault();
+            const adminId = document.getElementById('adminId').value.trim();
+            const adminEmail = document.getElementById('adminEmail').value.trim();
+            const adminPassword = document.getElementById('adminPassword').value.trim();
+
+            clearErrors();
+
+            if (!adminId || !adminEmail || !adminPassword) {
+                displayErrors('All fields are required.');
+                return;
+            }
+            if (!/^\S+@\S+\.\S+$/.test(adminEmail)) {
+                displayErrors('Invalid email format.');
+                return;
+            }
+
+            const loginData = {
+                adminUserId: adminId,
+                email: adminEmail,
+                password: adminPassword
+            };
+
+            try {
+                const response = await fetch(`${backendUrl}/api/auth/admin-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (response.status === 401) {
+                        displayErrors('Invalid admin ID, email, or password.');
+                    } else if (response.status === 403) {
+                        displayErrors('Access denied. Admin privileges required.');
+                    } else {
+                        displayErrors(errorData.message || 'Login failed. Please try again.');
+                    }
+                    return;
+                }
+
+                const result = await response.json();
+                const token = result.token;
+
+                // Verify admin role
+                if (!result.roles || !result.roles.includes('ROLE_ADMIN')) {
+                    clearLocalStorage();
+                    displayErrors('Access denied. Admin privileges required.');
+                    return;
+                }
+
+                // Store admin data in localStorage
+                localStorage.setItem('token', token);
+                localStorage.setItem('adminId', adminId);
+                localStorage.setItem('adminEmail', adminEmail);
+                localStorage.setItem('role', 'ROLE_ADMIN');
+
+                alert('Admin login successful!');
+                window.location.href = '../Admin/A-Home.html';
+            } catch (error) {
+                console.error('Error during admin login:', error);
+                displayErrors('An error occurred. Please try again later.');
+            }
+        }
+
+        function clearErrors() {
+            document.getElementById('adminIdError').style.display = 'none';
+            document.getElementById('adminEmailError').style.display = 'none';
+            document.getElementById('adminPasswordError').style.display = 'none';
+        }
+
+        function displayErrors(message) {
+            const idError = document.getElementById('adminIdError');
+            const emailError = document.getElementById('adminEmailError');
+            const passwordError = document.getElementById('adminPasswordError');
+            idError.textContent = message.includes('admin ID') || message.includes('All fields') ? message : 'Invalid admin ID.';
+            emailError.textContent = message.includes('email') || message.includes('All fields') ? message : 'Invalid admin email.';
+            passwordError.textContent = message.includes('password') || message.includes('All fields') ? message : 'Invalid admin password.';
+            idError.style.display = 'block';
+            emailError.style.display = 'block';
+            passwordError.style.display = 'block';
+        }
+
+        function clearLocalStorage() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('adminId');
+            localStorage.removeItem('adminEmail');
+            localStorage.removeItem('role');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../css/main.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: white;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #008080, #022b53);
+            padding: 13px 0;
+        }
+
+        .navbar-brand {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        footer {
+            background-color: #015b5b;
+        }
+
+        footer a:hover {
+            color: #f8f9fa !important;
+            text-decoration: underline !important;
+        }
+
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            z-index: 1000;
+            animation: move 0.5s infinite alternate;
+        }
+
+        .whatsapp-widget img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .editable {
+            pointer-events: none;
+            background-color: #f0f0f0;
+        }
+
+        .edit-icon {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 70%;
+            transform: translateY(-50%);
+        }
+
+        .btn-info-color {
+            background: linear-gradient(to right, #cd5e39, #d9c044);
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-info-color:hover {
+            background-color: #022b53;
+        }
+
+        .btn-info-color:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .card-custom {
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            height: 100%;
+        }
+
+        .profile-title {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .row-custom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .account-img-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        @media (max-width:576px) {
+
+            footer .col-md-2,
+            footer .col-md-6 {
+                text-align: center !important;
+                padding: 15px;
+            }
+
+            footer h6,
+            footer h4 {
+                font-size: 1.2rem;
+            }
+
+            footer ul li a {
+                font-size: 0.9rem;
+            }
+
+            footer .text-center p {
+                font-size: 0.8rem;
+            }
+
+            footer img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="whatsapp-widget">
+        <a href="../FrontEnd/Support.html" target="_blank">
+            <img src="../Assets/Icons/iconNew.png" alt="WhatsApp">
+        </a>
+    </div>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5" href="../FrontEnd/Home.html">MOBI-COMM</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto me-5">
+                        <li class="nav-item"><a class="nav-link" href="../FrontEnd/Support.html">Help</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../FrontEnd/FAQ.html">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <nav class="breadcrumb1" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb m-2 ps-3">
+                <li class="breadcrumb-item"><a href="../FrontEnd/Home.html">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #a3a1a1;">Profile</li>
+            </ol>
+        </nav>
+    </header>
+
+    <main style="margin-bottom: 10%;">
+        <div class="container my-5">
+            <div class="row row-custom">
+                <div class="col-md-6">
+                    <div class="card card-custom text-center">
+                        <img width="260px" height="260px" src="../Assets/Images/Globalization.gif" alt="App Image"
+                            class="img-fluid mb-4 mx-auto d-block">
+                        <h2>Welcome to Mobi-Comm!</h2>
+                        <p style="color: #8e410a;">Join our ever-growing family — where countless members recharge
+                            smarter and stay connected always!</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card card-custom" style="animation: slideIn 0.5s ease-out;">
+                        <div class="profile-title">User Profile</div>
+                        <form>
+                            <div class="mb-3 position-relative">
+                                <label for="inputMobileNumber" class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" id="inputMobileNumber" disabled>
+                            </div>
+                            <div class="mb-3 position-relative">
+                                <label for="inputFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control editable" id="inputFirstName">
+                                <span class="edit-icon" onclick="enableEdit('inputFirstName')">✏️</span>
+                            </div>
+                            <div class="mb-3 position-relative">
+                                <label for="inputLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control editable" id="inputLastName">
+                                <span class="edit-icon" onclick="enableEdit('inputLastName')">✏️</span>
+                            </div>
+                            <div class="mb-3 position-relative">
+                                <label for="inputEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control editable" id="inputEmail">
+                                <span class="edit-icon" onclick="enableEdit('inputEmail')">✏️</span>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info-color m-3 rounded-pill"
+                                    onclick="saveChanges()">Save Changes</button>
+                                <a href="../FrontEnd/PaymentHistory.html" class="btn btn-info-color m-3 rounded-pill"
+                                    id="rechargeHistoryLink">View Recharge History</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 text-md-start p-4">
+                <h6 class="fw-bold text-light">Information</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-light">About Us</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Privacy Policy</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Terms of use</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 text-md-start p-4">
+                <h6 class="fw-bold text-light">Information</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-light">Features & Benefits</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Plans & Pricing</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Security & Privacy</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Referral Program</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 text-md-start p-4">
+                <h6 class="fw-bold text-light">Support</h6>
+                <ul class="list-unstyled">
+                    <li><a href="../FrontEnd/Support.html" class="text-decoration-none text-light">Help Center</a></li>
+                    <li><a href="../FrontEnd/FAQ.html" class="text-decoration-none text-light">FAQs</a></li>
+                    <li><a href="../FrontEnd/Support.html" class="text-decoration-none text-light">Live Chat</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-md-end p-4">
+                <h5 class="fw-bold text-light">Mobi-Comm</h5>
+                <h6 class="text-light">Connect With Us!</h6>
+                <div>
+                    <a href="#" class="me-2"><img width="35" height="35"
+                            src="https://img.icons8.com/color/48/facebook-new.png" alt="facebook-new"></a>
+                    <a href="#" class="me-2"><img width="35" height="35"
+                            src="https://img.icons8.com/color/48/twitter-circled--v1.png"
+                            alt="twitter-circled--v1" /></a>
+                    <a href="#" class="me-2"><img width="35" height="35"
+                            src="https://img.icons8.com/color-glass/48/youtube-play.png" alt="youtube-play" /></a>
+                    <a href="#"><img width="35" height="35" src="https://img.icons8.com/3d-fluency/94/instagram-new.png"
+                            alt="instagram-new" /></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <p class="p-4 text-light">© 2025 Mobile Prepaid Recharge. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const backendUrl = 'http://localhost:8082';
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const token = localStorage.getItem('token');
+            const mobileNumber = localStorage.getItem('verifiedMobileNumber');
+            const userId = localStorage.getItem('userId');
+
+            if (!token || !mobileNumber || !userId) {
+                handleUnauthorized();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${backendUrl}/api/users/${mobileNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    if (response.status === 404) {
+                        throw new Error('User not found. Please log in again.');
+                    }
+                    throw new Error(`Failed to fetch user data: ${response.statusText}`);
+                }
+
+                const user = await response.json();
+                console.log('Fetched user data:', user);
+
+                // Populate form fields with user data
+                document.getElementById('inputMobileNumber').value = user.mobileNumber || '';
+                document.getElementById('inputFirstName').value = user.firstName || '';
+                document.getElementById('inputLastName').value = user.lastName || '';
+                document.getElementById('inputEmail').value = user.email || '';
+                document.getElementById('rechargeHistoryLink').href = `../FrontEnd/PaymentHistory.html?email=${encodeURIComponent(user.email || '')}`;
+
+                updateNavbar();
+            } catch (error) {
+                console.error('Error fetching profile data:', error.message);
+                alert('Error loading profile: ' + error.message);
+                handleUnauthorized();
+            }
+        });
+
+        // Enable editing for a field
+        function enableEdit(id) {
+            const input = document.getElementById(id);
+            input.classList.remove('editable');
+            input.focus();
+        }
+
+        // Save profile changes
+        async function saveChanges() {
+            const token = localStorage.getItem('token');
+            const mobileNumber = localStorage.getItem('verifiedMobileNumber');
+            const firstName = document.getElementById('inputFirstName').value.trim();
+            const lastName = document.getElementById('inputLastName').value.trim();
+            const email = document.getElementById('inputEmail').value.trim();
+
+            if (!token || !mobileNumber) {
+                handleUnauthorized();
+                return;
+            }
+
+            try {
+                // Fetch current user data to compare
+                const fetchResponse = await fetch(`${backendUrl}/api/users/${mobileNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!fetchResponse.ok) {
+                    if (fetchResponse.status === 401 || fetchResponse.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error(`Failed to fetch user data: ${fetchResponse.statusText}`);
+                }
+
+                const user = await fetchResponse.json();
+
+                // Check if there are changes
+                if (user.firstName === firstName && user.lastName === lastName && user.email === email) {
+                    alert('No changes detected!');
+                    return;
+                }
+
+                if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                const updateResponse = await fetch(`${backendUrl}/api/users/${mobileNumber}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        mobileNumber: mobileNumber,
+                        firstName,
+                        lastName,
+                        email
+                    })
+                });
+
+                if (!updateResponse.ok) {
+                    if (updateResponse.status === 401 || updateResponse.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error(`Failed to update user data: ${updateResponse.statusText}`);
+                }
+
+                alert('Profile updated successfully!');
+                // Re-disable fields after saving
+                ['inputFirstName', 'inputLastName', 'inputEmail'].forEach(id => {
+                    document.getElementById(id).classList.add('editable');
+                });
+            } catch (error) {
+                console.error('Error saving profile changes:', error.message);
+                alert('Error saving changes: ' + error.message);
+            }
+        }
+
+        // Handle unauthorized access
+        function handleUnauthorized() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('verifiedMobileNumber');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('role');
+            alert('Session expired or unauthorized access. Please verify your mobile number again.');
+            window.location.href = '../FrontEnd/FirstandLast.html';
+        }
+
+        function updateNavbar() {
+            const token = localStorage.getItem('token');
+            const navbarNav = document.querySelector('#navbarNav .navbar-nav');
+
+            const existingDropdown = navbarNav.querySelector('.nav-item.dropdown');
+            if (existingDropdown) existingDropdown.remove();
+
+            const dropdownHtml = `
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="account-img-icon" src="../Assets/Icons/icon2.png" alt="User Icon" width="26" height="26">
+                    Account
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                    <li><a class="dropdown-item" href="#" onclick="logout()">Log out</a></li>
+                </ul>
+            </li>
+        `;
+            navbarNav.insertAdjacentHTML('beforeend', dropdownHtml);
+
+            const logoutItem = navbarNav.querySelector(".dropdown-menu a");
+            if (token) {
+                logoutItem.textContent = 'Log out';
+                logoutItem.onclick = logout;
+            } else {
+                logoutItem.textContent = 'Log out';
+                logoutItem.href = '../FrontEnd/FirstandLast.html';
+                logoutItem.onclick = null;
+            }
+
+            const dropdownToggle = document.getElementById('accountDropdown');
+            dropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const dropdownMenu = dropdownToggle.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('verifiedMobileNumber');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('role');
+            alert('Logged out successfully!');
+            window.location.href = '../FrontEnd/FirstandLast.html';
+        }
+    </script>
+</body>
+
+</html>
