@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,13 +34,14 @@
         }
 
         .navbar {
-            background: linear-gradient(to right, #008080, #022b53);
-            padding: 13px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem 2rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
-            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 1.8rem;
+            font-weight: 700;
             color: white;
             letter-spacing: 1px;
         }
@@ -53,12 +53,8 @@
         }
 
         .nav-link:hover {
-            color: var(--gradient-start) !important;
+            color: var(--accent) !important;
             transform: translateY(-2px);
-        }
-
-        .user-icon {
-            filter: brightness(0) invert(1);
         }
 
         .dropdown-menu {
@@ -78,73 +74,42 @@
         }
 
         .header-section {
-            background: linear-gradient(45deg, rgba(205, 221, 255, 0.1), rgba(171, 255, 248, 0.278));
-            padding: 0.7rem 0 0.8rem 0;
+            background: linear-gradient(45deg, rgba(42, 109, 245, 0.1), rgba(0, 196, 180, 0.1));
+            padding: 1rem 0;
             margin-bottom: 2rem;
-            /* border-radius: 0px 0px 90% 90%; */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .breadcrumb-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0;
-        }
-
-        /* Update the mobile number section */
-        .mobile-number-section {
-            background: white;
-            border-radius: 20px;
-            padding: 0.5rem 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            display: inline-flex;
-            align-items: center;
-            margin-left: auto;
-        }
-
-        .breadcrumb {
-            margin-bottom: 0;
-            padding: 0.5rem 1rem;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
         }
 
         .section-title {
-            /* font-size: 2.5rem;
-                font-weight: 700;
-                color: var(--dark); */
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
             text-align: center;
-            /* margin-bottom: 2rem;
-                position: relative; */
+            margin-bottom: 2rem;
+            position: relative;
         }
 
-        /* .section-title::after {
-                content: '';
-                width: 60px;
-                height: 4px;
-                background: var(--accent);
-                position: absolute;
-                bottom: -10px;
-                left: 50%;
-                transform: translateX(-50%);
-                border-radius: 2px;
-            } */
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
 
-        /* Updated Recommended Plans Section */
         .recommended-container {
             margin-bottom: 3rem;
-            /* background-color: rgb(227, 250, 231); */
             padding: 2rem 0;
-            text-align: center;
         }
 
         .recommended-heading {
             display: inline-block;
             background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             color: white;
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 2rem;
             border-radius: 50px;
             font-size: 1.2rem;
             font-weight: 600;
@@ -166,7 +131,6 @@
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
-            box-sizing: border-box;
             opacity: 0;
             transform: translateY(50px);
             animation: fadeInUp 0.6s ease-out forwards;
@@ -178,15 +142,8 @@
         }
 
         @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .recommended-card img {
@@ -214,8 +171,7 @@
             font-size: 14px;
             font-weight: bold;
             color: white;
-            /* background: linear-gradient(45deg, var(--primary), var(--secondary)); */
-            background: linear-gradient(45deg, #e62222, #8a2706);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
             border-radius: 50px;
             cursor: pointer;
@@ -246,16 +202,11 @@
             z-index: 1;
         }
 
-        /* Updated Plan Cards for Scrollspy Section */
         .plan-card {
             position: relative;
             max-width: 100%;
-            background: transparent !important;
-            /* border: 2px solid var(--primary); */
-            border: 1px solid #276363;
-            box-shadow: none !important;
-            /* background: white;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); */
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
             transition: box-shadow 0.3s ease, transform 0.3s ease;
             margin-bottom: 20px;
             overflow: hidden;
@@ -270,14 +221,12 @@
         }
 
         .plan-card__header {
-            /* background: linear-gradient(45deg, var(--primary), var(--secondary)); */
-            background: transparent !important;
-            /* border-bottom: 2px solid var(--primary); */
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             height: 200px;
             transition: height 0.5s ease;
             overflow: hidden;
             text-align: left;
-            color: var(--dark) !important;
+            color: white;
             padding: 15px;
             display: flex;
             flex-direction: column;
@@ -293,7 +242,6 @@
             right: 10px;
             font-size: 1.5rem;
             font-weight: bold;
-            color: blue !important;
         }
 
         .plan-card__header p {
@@ -313,9 +261,7 @@
             height: 60px;
             transition: height 0.5s ease;
             overflow: hidden;
-            /* background: #056c6cd0; */
-            background: cornflowerblue;
-            /* background: transparent !important; */
+            background: #fff;
             border-radius: 0 0 15px 15px;
             animation: slideUp 0.5s ease-out forwards;
             font-size: 1rem;
@@ -327,21 +273,14 @@
         }
 
         @keyframes slideUp {
-            0% {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
         .plan-card__title {
             font-size: 1.2rem;
             font-weight: 600;
-            color: white;
+            color: var(--dark);
             margin-bottom: 8px;
         }
 
@@ -350,7 +289,7 @@
         }
 
         .plan-card__details {
-            color: rgb(237, 235, 255);
+            color: #666;
             font-style: italic;
             margin-bottom: 8px;
             font-size: 1rem;
@@ -364,7 +303,7 @@
             list-style: none;
             padding: 0;
             margin-top: 10px;
-            color: #d6d6d6;
+            color: #424242;
             font-size: 1rem;
         }
 
@@ -382,17 +321,9 @@
             transform: translateX(0);
         }
 
-        .plan-card__extras li:nth-child(1) {
-            transition-delay: 0.25s;
-        }
-
-        .plan-card__extras li:nth-child(2) {
-            transition-delay: 0.5s;
-        }
-
-        .plan-card__extras li:nth-child(3) {
-            transition-delay: 0.75s;
-        }
+        .plan-card__extras li:nth-child(1) { transition-delay: 0.25s; }
+        .plan-card__extras li:nth-child(2) { transition-delay: 0.5s; }
+        .plan-card__extras li:nth-child(3) { transition-delay: 0.75s; }
 
         .plan-card .recharge-btn {
             margin-top: 10px;
@@ -410,11 +341,15 @@
             background: linear-gradient(45deg, #ff6b6b, #ee5253);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             z-index: 1;
+            display: none;
+        }
+
+        .badge-custom.visible {
+            display: block;
         }
 
         .recharge-btn {
-            background: linear-gradient(45deg, var(--primary), #013636);
-            /* background: #013636; */
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             padding: 6px 16px;
@@ -429,9 +364,8 @@
             transform: scale(1.05);
         }
 
-        /* Filter Section */
         .filter-section {
-            background: rgb(211, 215, 255);
+            background: white;
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -441,14 +375,14 @@
         .filter-section h5 {
             font-size: 1.5rem;
             font-weight: 600;
-            color: rgb(48, 48, 48);
+            color: var(--dark);
             margin-bottom: 1.5rem;
         }
 
-        /* .filter-section h5::before {
-                content: '▼ ';
-                color: var(--primary);
-            } */
+        .filter-section h5::before {
+            content: '▼ ';
+            color: var(--primary);
+        }
 
         .filter-select {
             border-radius: 10px;
@@ -482,19 +416,14 @@
             color: var(--primary);
         }
 
-        .filter-section .btn-outline-primary:hover {
-            color: white !important;
-        }
-
         .filter-section .btn-outline-primary::before {
             content: '↺ ';
         }
 
-        /* Mobile Number Section */
         .mobile-number-section {
             background: white;
             border-radius: 20px;
-            padding: 0.6rem 2rem;
+            padding: 0.75rem 1.5rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             display: inline-flex;
             align-items: center;
@@ -502,12 +431,12 @@
 
         .mobile-number-section span {
             font-weight: 600;
-            color: #015b5b;
-            margin-right: 4rem;
+            color: #FF6F61;
+            margin-right: 1rem;
         }
 
         .mobile-number-section .btn-primary {
-            background: #015b5b;
+            background: #FF6F61;
             border-radius: 50px;
             padding: 0.5rem 1.5rem;
             font-size: 0.9rem;
@@ -523,8 +452,9 @@
             padding: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             position: sticky;
-            top: 2rem;
-            height: fit-content;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
         }
 
         .nav-pills .nav-link {
@@ -547,7 +477,7 @@
         }
 
         footer {
-            background: linear-gradient(to right, #015b5b, #013636);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 3rem 0;
             margin-top: 4rem;
@@ -560,7 +490,7 @@
         }
 
         .footer-link:hover {
-            color: var(--gradient-start);
+            color: var(--accent);
             text-decoration: underline;
         }
 
@@ -620,6 +550,7 @@
             .sidebar {
                 position: static;
                 margin-bottom: 2rem;
+                height: auto;
             }
 
             .mobile-number-section {
@@ -641,7 +572,7 @@
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand ms-5" href="../FrontEnd/Home.html">MOBI-COMM</a>
+                <a class="navbar-brand" href="../FrontEnd/Home.html">MOBI-COMM</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -654,11 +585,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="../FrontEnd/Support.html">Help</a>
                         </li>
-                        <li class="nav-item dropdown me-5">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../Assets/Icons/icon2.png" alt="User" width="26" height="26"
-                                    class="me-1 user-icon">
+                                <img src="../Assets/Icons/icon2.png" alt="User" width="26" height="26" class="me-1">
                                 Account
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="accountDropdown">
@@ -680,8 +610,7 @@
                     </div>
                     <div class="modal-body">
                         <label for="mobileNumberInput" class="form-label">Mobile Number</label>
-                        <input type="text" id="mobileNumberInput" class="form-control"
-                            placeholder="Enter your mobile number">
+                        <input type="text" id="mobileNumberInput" class="form-control" placeholder="Enter your mobile number">
                         <div id="errorMessage" class="text-danger mt-2" style="display: none;">
                             Invalid mobile number! Please enter a valid 10-digit number.
                         </div>
@@ -693,7 +622,7 @@
             </div>
         </div>
 
-        <!-- <div class="header-section">
+        <div class="header-section">
             <div class="container">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -704,35 +633,13 @@
                 <div class="d-flex justify-content-end align-items-center mb-3">
                     <div class="mobile-number-section">
                         <span id="displayMobileNumber">9876543210</span>
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#updateNumberModal">Change</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-        <div class="header-section">
-            <div class="container">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="breadcrumb-container">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="../FrontEnd/Home.html">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Recharge</li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <div class="mobile-number-section">
-                        <span id="displayMobileNumber">9876543210</span>
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#updateNumberModal">Change</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateNumberModal">Change</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="updateNumberModal" tabindex="-1" aria-labelledby="updateNumberModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="updateNumberModal" tabindex="-1" aria-labelledby="updateNumberModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -783,18 +690,15 @@
     <main class="container">
         <h1 class="section-title">Recharge Plans</h1>
 
-        <!-- Updated Recommended Plans Section -->
         <section class="recommended-container">
-            <div class="container">
+            <div class="container text-center">
                 <h2 class="recommended-heading">Recommended Plans</h2>
                 <div class="row justify-content-center" id="recommended-plans-container"></div>
             </div>
         </section>
 
         <section>
-            <div class="text-center">
-                <h2 class="recommended-heading mb-5">Explore More Plans</h2>
-            </div>
+            <h2 class="plans-heading text-center">Explore More Plans</h2>
             <div class="filter-section">
                 <h5 class="text-center">Filter Plans</h5>
                 <div class="row g-3">
@@ -859,7 +763,7 @@
                         <li class="nav-item"><a class="nav-link" href="#topups">Topup Plans</a></li>
                     </ul>
                 </nav>
-                <div class="col-md-9">
+                <div class="col-md-9" style="height: calc(100vh - 200px); overflow-y: auto;">
                     <div id="plans-container" class="row"></div>
                 </div>
             </div>
@@ -898,14 +802,10 @@
                     <h5 class="fw-bold">Mobi-Comm</h5>
                     <p>Connect With Us!</p>
                     <div>
-                        <a href="#" class="me-3"><img width="35" height="35"
-                                src="https://img.icons8.com/color/48/facebook-new.png" alt="facebook"></a>
-                        <a href="#" class="me-3"><img width="35" height="35"
-                                src="https://img.icons8.com/color/48/twitter-circled--v1.png" alt="twitter"></a>
-                        <a href="#" class="me-3"><img width="35" height="35"
-                                src="https://img.icons8.com/color-glass/48/youtube-play.png" alt="youtube"></a>
-                        <a href="#"><img width="35" height="35"
-                                src="https://img.icons8.com/3d-fluency/94/instagram-new.png" alt="instagram"></a>
+                        <a href="#" class="me-3"><img width="35" height="35" src="https://img.icons8.com/color/48/facebook-new.png" alt="facebook"></a>
+                        <a href="#" class="me-3"><img width="35" height="35" src="https://img.icons8.com/color/48/twitter-circled--v1.png" alt="twitter"></a>
+                        <a href="#" class="me-3"><img width="35" height="35" src="https://img.icons8.com/color-glass/48/youtube-play.png" alt="youtube"></a>
+                        <a href="#"><img width="35" height="35" src="https://img.icons8.com/3d-fluency/94/instagram-new.png" alt="instagram"></a>
                     </div>
                 </div>
             </div>
@@ -927,13 +827,14 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '../FrontEnd/FirstPageLast.html';
+                window.location.href = '../FrontEnd/FirstandLast.html';
                 return;
             }
 
             await fetchPlans(token);
             updateNavbar();
             setupEventListeners(token);
+            setupScrollspy();
         });
 
         async function fetchPlans(token) {
@@ -1044,13 +945,13 @@
         }
 
         function createPlanCard(plan, mobileNumber) {
-            const showBadge = plan.badge;
+            const hasBadge = plan.badge && plan.badge.trim() !== '';
             const extrasList = plan.extras ? plan.extras.split('|').map(item => item.trim()).filter(item => item) : [];
 
             return `
                 <div class="col-md-4">
                     <div class="plan-card" data-expanded="false">
-                        ${showBadge ? `<span class="badge-custom">${plan.badge}</span>` : ''}
+                        ${hasBadge ? `<span class="badge-custom ${hasBadge ? 'visible' : ''}">${plan.badge}</span>` : ''}
                         <div class="plan-card__header">
                             <div class="price">₹${plan.price}</div>
                             <p>${plan.validity}</p>
@@ -1110,7 +1011,7 @@
 
             attachRechargeButtonListeners(token);
             attachTouchExpandListeners();
-            updateActiveLink();
+            setupScrollspy();
         }
 
         function attachRechargeButtonListeners(token) {
@@ -1172,14 +1073,14 @@
                 validity: rawPlan.validity || 'N/A',
                 details: [rawPlan.benefits, rawPlan.data, rawPlan.extras].filter(Boolean).join(', ') || 'No additional details',
                 extras: rawPlan.extras || null,
-                badge: rawPlan.badge || null
+                badge: rawPlan.badge || ''
             };
         }
 
         function handleUnauthorized() {
             localStorage.clear();
             alert('Session expired or unauthorized access. Please verify your mobile number again.');
-            window.location.href = '../FrontEnd/FirstPageLast.html';
+            window.location.href = '../FrontEnd/FirstandLast.html';
         }
 
         function showExploreModal(plan) {
@@ -1264,57 +1165,30 @@
             renderPlansInScrollspy([], false, localStorage.getItem('token'));
         }
 
-        // function updateActiveLink() {
-        //     const scrollSpy = new bootstrap.ScrollSpy(document.body, {
-        //         target: '#plan-categories',
-        //         offset: 50
-        //     });
-
-        //     const container = document.getElementById('plans-container');
-        //     container.addEventListener('scroll', () => {
-        //         const sections = container.querySelectorAll('h3[id]');
-        //         let activeSection = null;
-        //         sections.forEach(section => {
-        //             const rect = section.getBoundingClientRect();
-        //             if (rect.top >= 0 && rect.top < window.innerHeight / 2) activeSection = section.id;
-        //         });
-
-        //         if (activeSection) {
-        //             document.querySelectorAll('#plan-categories .nav-link').forEach(link => {
-        //                 link.classList.remove('active');
-        //                 if (link.getAttribute('href').substring(1) === activeSection) link.classList.add('active');
-        //             });
-        //         }
-        //     });
-        // }
-
-        function updateActiveLink() {
-            const container = document.getElementById('plans-container');
-            const navLinks = document.querySelectorAll('#plan-categories .nav-link');
-
-            // Create an Intersection Observer to track which section is visible
+        function setupScrollspy() {
             const observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             const id = entry.target.getAttribute('id');
+                            const navLinks = document.querySelectorAll('#plan-categories .nav-link');
                             navLinks.forEach(link => {
                                 link.classList.remove('active');
                                 if (link.getAttribute('href') === `#${id}`) {
                                     link.classList.add('active');
+                                    link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                                 }
                             });
                         }
                     });
                 },
                 {
-                    root: container,
-                    threshold: 0.5,
-                    rootMargin: '0px 0px -50% 0px'
+                    root: document.querySelector('.col-md-9'),
+                    rootMargin: '-20% 0px -60% 0px',
+                    threshold: 0.1
                 }
             );
 
-            // Observe all section headings
             document.querySelectorAll('#plans-container h3[id]').forEach(section => {
                 observer.observe(section);
             });
@@ -1336,7 +1210,7 @@
         function logout() {
             localStorage.clear();
             alert('Logged out successfully!');
-            window.location.href = '../FrontEnd/FirstPageLast.html';
+            window.location.href = '../FrontEnd/FirstandLast.html';
         }
 
         async function verifyNumber() {
@@ -1478,21 +1352,12 @@
             document.getElementById('apply-filter-btn').addEventListener('click', filterPlans);
             document.getElementById('reset-filter-btn').addEventListener('click', resetFilters);
 
-            const scrollSpy = new bootstrap.ScrollSpy(document.body, {
-                target: '#plan-categories',
-                offset: 50
-            });
-
             document.querySelectorAll('#plan-categories .nav-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const href = link.getAttribute('href');
                     document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
                     history.pushState(null, null, href);
-                    link.classList.add('active');
-                    document.querySelectorAll('#plan-categories .nav-link').forEach(otherLink => {
-                        if (otherLink !== link) otherLink.classList.remove('active');
-                    });
                 });
             });
 
@@ -1500,5 +1365,4 @@
         }
     </script>
 </body>
-
 </html>

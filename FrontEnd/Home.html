@@ -465,6 +465,50 @@
             }
         }
 
+        .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.loader-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #fff;
+    border-top: 6px solid #ff6f61;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loader-text {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
         @media (max-width:576px) {
             body {
                 font-size: 14px;
@@ -727,6 +771,10 @@
 
 <body id="top">
 
+    <div class="loader-overlay" id="globalLoader">
+        <div class="loader"></div>
+        <div class="loader-text">Processing...</div>
+    </div>
 
     <!-- WhatsApp Widget -->
     <div class="whatsapp-widget">
@@ -1184,11 +1232,11 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-    <script>
+    <!-- <script>
         document.addEventListener("DOMContentLoaded", async function () {
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '../FrontEnd/FirstandLast.html';
+                window.location.href = '../FrontEnd/FirstPageLast.html';
                 return;
             }
 
@@ -1332,7 +1380,7 @@
         function handleUnauthorized() {
             localStorage.clear();
             alert('Session expired or unauthorized access. Please verify your mobile number again.');
-            window.location.href = '../FrontEnd/FirstandLast.html';
+            window.location.href = '../FrontEnd/FirstPageLast.html';
         }
 
         async function verifyRechargeNumber() {
@@ -1453,7 +1501,7 @@
         function logout() {
             localStorage.clear();
             alert("Logged out successfully!");
-            window.location.href = '../FrontEnd/FirstandLast.html';
+            window.location.href = '../FrontEnd/FirstPageLast.html';
         }
 
         async function verifyLogin() {
@@ -1572,7 +1620,464 @@
             }
             return false;
         }
-    </script>
+    </script> -->
+
+    <script>
+        function showLoader() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) loader.classList.add('active');
+        }
+        
+        function hideLoader() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) loader.classList.remove('active');
+        }
+        
+        document.addEventListener("DOMContentLoaded", async function () {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '../FrontEnd/FirstPageLast.html';
+                return;
+            }
+        
+            await fetchPlans(token);
+            updateNavbar();
+            setupScrollButtons();
+            addNavigationLoaders();
+        
+            document.querySelector('.search-container .btn-secondary').addEventListener('click', function (e) {
+                e.preventDefault();
+                handleSearch(e);
+            });
+        
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            window.onscroll = () => backToTopBtn.classList.toggle('visible', window.scrollY > 300);
+            // Removed loader from back to top
+            backToTopBtn.onclick = e => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+        
+            const rechargeModal = document.getElementById('rechargeModal');
+            rechargeModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const title = button.getAttribute('data-title');
+                const content = button.getAttribute('data-content');
+                const planId = button.getAttribute('data-plan-id');
+                document.getElementById('rechargeModalLabel').textContent = title;
+                document.getElementById('modalBodyContent').innerHTML = content.replace(/, /g, '<br>');
+                document.querySelector('#rechargeModal .animated-btn1').setAttribute('data-plan-id', planId);
+            });
+        });
+        
+        window.addEventListener('load', () => {
+            hideLoader();
+        });
+        
+        window.addEventListener('beforeunload', () => {
+            showLoader();
+        });
+        
+        async function fetchPlans(token) {
+            try {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+        
+                const popularResponse = await fetch('http://localhost:8082/api/plans/popular', { headers });
+                if (!popularResponse.ok) {
+                    if (popularResponse.status === 401 || popularResponse.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error('Failed to fetch popular plans');
+                }
+                const popularPlans = await popularResponse.json();
+                const popularContainer = document.getElementById('popularPlansContainer');
+                const uniquePopularPlans = popularPlans.slice(0, 3);
+                popularContainer.innerHTML = uniquePopularPlans.map(plan => `
+                    <div class="col">
+                        <div class="card text-center">
+                            <img src="${plan.image || '../Assets/Images/default-plan.png'}" class="card-img-top mx-auto mt-3" alt="${plan.title}" style="width: 80%; max-height: 240px;">
+                            <div class="card-body">
+                                <h5 class="card-title">${plan.title}</h5>
+                                <p class="card-text">
+                                    Plan Name: <b>${plan.name}</b><br>
+                                    Price: ₹${plan.price} / ${plan.validity}${plan.data ? `-${plan.data}` : ''}
+                                </p>
+                                <a href="#" class="btn btn-secondary btn-sm buy-plan-btn" data-plan='${JSON.stringify(plan)}'>Buy Plan</a>
+                                <a href="#" class="ms-3 explore-btn" 
+                                   data-title="${plan.title}" 
+                                   data-details="Plan Name: ${plan.name}<br>Price: ₹${plan.price} / ${plan.validity}<br>${plan.data || ''}<br>${plan.extras || ''}<br>${plan.benefits || ''}">
+                                    Explore
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+        
+                const rechargeResponse = await fetch('http://localhost:8082/api/plans/recharge', { headers });
+                if (!rechargeResponse.ok) {
+                    if (rechargeResponse.status === 401 || rechargeResponse.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error('Failed to fetch recharge plans');
+                }
+                const rechargePlans = await rechargeResponse.json();
+                const rechargeContainer = document.getElementById('rechargePlansContainer');
+                rechargeContainer.innerHTML = rechargePlans.map(plan => `
+                    <div class="card recharge-card text-center" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${plan.title}</h5>
+                            <p class="card-text">${plan.data || ''}<br>${plan.extras || ''}</p>
+                            <button type="button" class="btn btn-secondary btn-sm view-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#rechargeModal" 
+                                    data-plan-id="${plan.id}" 
+                                    data-plan='${JSON.stringify(plan)}'
+                                    data-title="${plan.title}" 
+                                    data-content="${plan.data || ''}, ${plan.extras || ''}">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+        
+                document.querySelectorAll('.buy-plan-btn').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        showLoader();
+                        const rawPlan = JSON.parse(button.getAttribute('data-plan'));
+                        const selectedPlanForVerification = normalizePlanData(rawPlan);
+                        localStorage.setItem('selectedPlan', JSON.stringify(selectedPlanForVerification));
+                        setTimeout(() => {
+                            hideLoader();
+                            window.location.href = '../FrontEnd/Payment1.html';
+                        }, 500);
+                    });
+                });
+        
+                document.querySelector('#rechargeModal .animated-btn1').addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    showLoader();
+        
+                    const planId = event.target.getAttribute('data-plan-id');
+                    const viewButton = document.querySelector(`.view-btn[data-plan-id="${planId}"]`);
+                    const rawPlan = JSON.parse(viewButton.getAttribute('data-plan'));
+                    const selectedPlanForVerification = normalizePlanData(rawPlan);
+        
+                    localStorage.setItem('selectedPlan', JSON.stringify(selectedPlanForVerification));
+                    bootstrap.Modal.getInstance(document.getElementById('rechargeModal')).hide();
+        
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    hideLoader();
+                    window.location.href = '../FrontEnd/Payment1.html';
+                });
+        
+                setupExploreButtons();
+            } catch (error) {
+                console.error('Error fetching plans:', error);
+                document.getElementById('popularPlansContainer').innerHTML = '<p class="text-center text-danger">Error loading popular plans</p>';
+                document.getElementById('rechargePlansContainer').innerHTML = '<p class="text-center text-danger">Error loading recharge plans</p>';
+            }
+        }
+        
+        function addNavigationLoaders() {
+            document.querySelectorAll('a[href]').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    // Exclude back to top link and other non-navigation links
+                    if (href === '#top' || 
+                        href === '#' ||
+                        this.hasAttribute('data-bs-toggle') ||
+                        href.startsWith('http') ||
+                        href === '' ||
+                        href.startsWith('javascript:')) {
+                        return;
+                    }
+        
+                    e.preventDefault();
+                    showLoader();
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500);
+                });
+            });
+        }
+        
+        function normalizePlanData(rawPlan) {
+            return {
+                id: rawPlan.id ? String(rawPlan.id) : null,
+                title: rawPlan.title || rawPlan.name || 'Unknown Plan',
+                price: String(rawPlan.price),
+                validity: rawPlan.validity || 'N/A',
+                details: [rawPlan.benefits, rawPlan.data, rawPlan.extras]
+                    .filter(Boolean)
+                    .join(', ') || 'No additional details',
+                extras: rawPlan.extras || null,
+                badge: rawPlan.badge || null
+            };
+        }
+        
+        function handleUnauthorized() {
+            localStorage.clear();
+            alert('Session expired or unauthorized access. Please verify your mobile number again.');
+            window.location.href = '../FrontEnd/FirstPageLast.html';
+        }
+        
+        async function verifyRechargeNumber() {
+            let mobileNumber = document.getElementById("mobileNumber").value;
+            let errorMessage = document.getElementById("errorMessage");
+            let regex = /^[6-9]\d{9}$/;
+        
+            errorMessage.style.display = "none";
+        
+            if (!regex.test(mobileNumber)) {
+                errorMessage.textContent = "Invalid mobile number! Please enter a valid 10-digit number.";
+                errorMessage.style.display = "block";
+                return;
+            }
+        
+            try {
+                showLoader();
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8082/api/users/validate-mobile/${mobileNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+        
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                const result = await response.json();
+        
+                if (result.valid) {
+                    localStorage.setItem('verifiedMobileNumber', mobileNumber);
+                    let modalElement = document.getElementById("mobileModal");
+                    let modalInstance = bootstrap.Modal.getInstance(modalElement);
+                    if (modalInstance) {
+                        modalElement.addEventListener('hidden.bs.modal', function () {
+                            hideLoader();
+                            window.location.href = '../FrontEnd/Plans.html';
+                        }, { once: true });
+                        modalInstance.hide();
+                    }
+                } else {
+                    hideLoader();
+                    errorMessage.textContent = "Not a Mobi-Comm user! Please use registered number.";
+                    errorMessage.style.display = "block";
+                }
+            } catch (error) {
+                hideLoader();
+                console.error('Error verifying mobile number:', error);
+                errorMessage.textContent = "An error occurred while verifying your number. Please try again.";
+                errorMessage.style.display = "block";
+            }
+        }
+        
+        async function verifyProfileAndRedirect(event) {
+            event.preventDefault();
+            const token = localStorage.getItem('token');
+            const mobileNumber = localStorage.getItem('verifiedMobileNumber');
+            if (!token || !mobileNumber) {
+                handleUnauthorized();
+                return;
+            }
+        
+            try {
+                showLoader();
+                const response = await fetch(`http://localhost:8082/api/users/validate-mobile/${mobileNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+        
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        handleUnauthorized();
+                        return;
+                    }
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                const result = await response.json();
+        
+                if (result.valid) {
+                    hideLoader();
+                    window.location.href = '../FrontEnd/Profile.html';
+                } else {
+                    hideLoader();
+                    alert("Profile not found! Please register or contact support.");
+                    localStorage.removeItem('verifiedMobileNumber');
+                }
+            } catch (error) {
+                hideLoader();
+                console.error('Error verifying profile:', error);
+                alert("An error occurred while verifying your profile. Please try again.");
+            }
+        }
+        
+        function updateNavbar() {
+            const token = localStorage.getItem('token');
+            const loginItem = document.querySelector(".dropdown-menu li:nth-child(2)");
+            const manageProfileLink = document.querySelector(".dropdown-menu li:nth-child(1) a");
+        
+            if (token) {
+                loginItem.innerHTML = '<a class="dropdown-item" href="#" onclick="logout()">Log out</a>';
+                manageProfileLink.style.pointerEvents = "auto";
+                manageProfileLink.style.color = "";
+            } else {
+                loginItem.innerHTML = '<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#mobileModal1">Log in</a>';
+                manageProfileLink.style.pointerEvents = "none";
+                manageProfileLink.style.color = "#ccc";
+            }
+        }
+        
+        function logout() {
+            showLoader();
+            localStorage.clear();
+            alert("Logged out successfully!");
+            setTimeout(() => {
+                hideLoader();
+                window.location.href = '../FrontEnd/FirstPageLast.html';
+            }, 500);
+        }
+        
+        async function verifyLogin() {
+            event.preventDefault();
+            const mobileNumber = document.getElementById("mobileNumber1").value.trim();
+            const email = document.getElementById("email1").value.trim();
+            const password = document.getElementById("password1").value.trim();
+        
+            document.getElementById("mobileNumber1").classList.remove("is-invalid");
+            document.getElementById("email1").classList.remove("is-invalid");
+            document.getElementById("password1").classList.remove("is-invalid");
+        
+            try {
+                showLoader();
+                const response = await fetch('http://localhost:8082/api/auth/verify-mobile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobileNumber })
+                });
+        
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Login failed');
+                }
+        
+                const result = await response.json();
+                const token = result.token;
+        
+                localStorage.setItem('token', token);
+                localStorage.setItem('verifiedMobileNumber', mobileNumber);
+                localStorage.setItem('userId', result.userId);
+                localStorage.setItem('userEmail', result.email || '');
+                localStorage.setItem('role', result.role);
+        
+                alert("Logged in successfully!");
+                const modal = bootstrap.Modal.getInstance(document.getElementById("mobileModal1"));
+                modal.hide();
+                document.getElementById("loginForm").reset();
+                updateNavbar();
+                hideLoader();
+                window.location.href = '../FrontEnd/Home.html';
+            } catch (error) {
+                hideLoader();
+                console.error("Error during login:", error);
+                document.getElementById("mobileNumber1").classList.add("is-invalid");
+                alert("Login failed: " + error.message);
+            }
+        }
+        
+        function setupScrollButtons() {
+            const cardContainer = document.querySelector(".card-container");
+            const scrollLeftBtn = document.querySelector(".scroll-left");
+            const scrollRightBtn = document.querySelector(".scroll-right");
+            const scrollAmount = 300;
+        
+            scrollLeftBtn.addEventListener("click", function () {
+                cardContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+            });
+            scrollRightBtn.addEventListener("click", function () {
+                cardContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
+            });
+        }
+        
+        function setupExploreButtons() {
+            document.querySelectorAll('.explore-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const planTitle = this.dataset.title || 'N/A';
+                    const planDetails = this.dataset.details || 'No details available';
+        
+                    document.getElementById('modalTitle').innerHTML = planTitle;
+                    document.getElementById('modalDetails').innerHTML = planDetails;
+        
+                    const overlay = document.getElementById('overlay');
+                    overlay.style.display = 'block';
+        
+                    const modal = new bootstrap.Modal(document.getElementById('planModal'), { backdrop: true });
+                    modal.show();
+        
+                    modal._element.addEventListener('hidden.bs.modal', function () {
+                        overlay.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) backdrop.remove();
+                    }, { once: true });
+                });
+            });
+        }
+        
+        function handleFilterChange() {
+            const filterValue = document.getElementById('searchFilter').value;
+            showLoader();
+            switch (filterValue) {
+                case 'recharge_plans': window.location.href = '../FrontEnd/Plans.html'; break;
+                case 'recharge': window.location.href = '../FrontEnd/Home.html#rechargeNew'; break;
+                case 'account': window.location.href = '../FrontEnd/Profile.html'; break;
+                case 'faq': window.location.href = '../FrontEnd/FAQ.html'; break;
+                case 'help': window.location.href = '../FrontEnd/Support.html'; break;
+            }
+        }
+        
+        function handleSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchQuery').value.trim().toLowerCase();
+            const filterValue = document.getElementById('searchFilter').value;
+        
+            if (query && filterValue) {
+                showLoader();
+                if (filterValue === 'all') {
+                    if (query.includes('recharge plans')) window.location.href = '../FrontEnd/Plans.html';
+                    else if (query.includes('recharge')) window.location.href = '../FrontEnd/Home.html#rechargeNew';
+                    else if (query.includes('account')) window.location.href = '../FrontEnd/Profile.html';
+                    else if (query.includes('faq')) window.location.href = '../FrontEnd/FAQ.html';
+                    else if (query.includes('help')) window.location.href = '../FrontEnd/Support.html';
+                    else {
+                        hideLoader();
+                        alert('No related pages found');
+                    }
+                } else {
+                    window.location.href = filterValue + '.html';
+                }
+            } else {
+                alert('Please enter a search query');
+            }
+            return false;
+        }
+        </script>
 </body>
 
 </html>
