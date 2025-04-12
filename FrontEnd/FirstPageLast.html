@@ -239,6 +239,7 @@
         .banner {
             text-align: center;
             padding: 30px 20px;
+            /* background-color: #e0f7fa; */
             background: linear-gradient(to right, #f3dfda, #c0d5c2);
             /* color: #222; */
         }
@@ -602,7 +603,8 @@
 
         /* For Why Choose Mobi-Comm part */
         .mobi-comm-section {
-            background-image: linear-gradient(45deg, #babdfb, #e2e1f6);
+            background-image: linear-gradient(to bottom, #acb0fd, rgb(236, 236, 236));
+            border-radius: 15% 15% 0 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1222,8 +1224,8 @@
         }
 
         .achievement-card {
-            width: 170px;
-            height: 130px;
+            width: 200px;
+            height: 150px;
             display: inline-block;
             margin-right: 20px;
             border: 2px solid #510f74;
@@ -1267,7 +1269,7 @@
         }
 
         .card-title1 {
-            font-size: 0.85rem;
+            font-size: 1.10rem;
             font-weight: 600;
             color: #333;
             margin-bottom: 5px;
@@ -1275,8 +1277,9 @@
         }
 
         .card-icon {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #55da3d;
+            margin-top: 10px;
         }
 
         @media (max-width: 768px) {
@@ -1504,16 +1507,98 @@
             border-radius: 15px 15px 0 0;
         }
 
-        .spinner {
+        /* .spinner {
             width: 3rem;
             height: 3rem;
             margin: 20px auto;
+        } */
+
+        .spinner {
+            margin: 0 auto;
+            width: 40px;
+            height: 40px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1050;
+        }
+
+        .cube1,
+        .cube2 {
+            background-color: #f5f5f5;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-animation: cubemove 1.8s infinite ease-in-out;
+            animation: cubemove 1.8s infinite ease-in-out;
+        }
+
+        .cube2 {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+
+        @-webkit-keyframes cubemove {
+            25% {
+                -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5)
+            }
+
+            50% {
+                -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg)
+            }
+
+            75% {
+                -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)
+            }
+
+            100% {
+                -webkit-transform: rotate(-360deg)
+            }
+        }
+
+        @keyframes cubemove {
+            25% {
+                transform: translateX(42px) rotate(-90deg) scale(0.5);
+                -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+            }
+
+            50% {
+                transform: translateX(42px) translateY(42px) rotate(-179deg);
+                -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+            }
+
+            50.1% {
+                transform: translateX(42px) translateY(42px) rotate(-180deg);
+                -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+            }
+
+            75% {
+                transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+                -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+            }
+
+            100% {
+                transform: rotate(-360deg);
+                -webkit-transform: rotate(-360deg);
+            }
         }
     </style>
 
 </head>
 
 <body>
+
+    <div id="loader" class="spinner" style="display: none;">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+    <div id="loaderOverlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1040;">
+    </div>
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -1967,7 +2052,6 @@
 
         </section>
 
-
     </main>
 
     <footer class="container-fluid">
@@ -2331,6 +2415,9 @@
         async function verifyMobileNumber() {
             const mobileNumber = document.getElementById('verifyMobileNumber').value.trim();
             const errorMessage = document.getElementById('verifyErrorMessage');
+            const loader = document.getElementById('loader');
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const verifyModal = document.getElementById('verifyModal');
             const regex = /^[6-9]\d{9}$/;
 
             if (!regex.test(mobileNumber)) {
@@ -2339,7 +2426,15 @@
                 return;
             }
 
+            const modalInstance = bootstrap.Modal.getInstance(verifyModal) || new bootstrap.Modal(verifyModal);
+            modalInstance.hide();
+            loader.style.display = 'block';
+            loaderOverlay.style.display = 'block';
+
             try {
+
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
                 const verifyResponse = await fetch('http://localhost:8082/api/auth/verify-mobile', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -2364,16 +2459,21 @@
                 localStorage.setItem('selectedPlan', JSON.stringify(selectedPlanForVerification));
 
                 errorMessage.style.display = 'none';
-                const modal = bootstrap.Modal.getInstance(document.getElementById('verifyModal'));
-                modal.hide();
+                // const modal = bootstrap.Modal.getInstance(document.getElementById('verifyModal'));
+                // modal.hide();
 
-                // Redirect to payment page instead of initiating payment directly
                 window.location.href = '../FrontEnd/Payment1.html';
 
             } catch (error) {
                 console.error('Error during mobile number verification:', error);
                 errorMessage.textContent = error.message || 'Error verifying number. Please try again.';
                 errorMessage.style.display = 'block';
+
+                modalInstance.show();
+
+            } finally {
+                loader.style.display = 'none';
+                loaderOverlay.style.display = 'none';
             }
         }
 
